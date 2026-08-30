@@ -336,8 +336,7 @@ def main(*_args, **_kwargs):
         from rtai_core.gui.mission_gui import MissionGUI
         mission_tab = MissionGUI()
     except Exception as e:
-        # Fallback placeholder
-        from PySide6.QtWidgets import QLabel
+        # Fallback placeholder — use globally imported QLabel (do not re-import locally to avoid shadowing)
         mission_tab = QLabel(f"Mission GUI unavailable: {e}")
         mission_tab.setAlignment(Qt.AlignmentFlag.AlignCenter)
     tabs.addTab(_tactical_dashboard_tab(), "◆ TACTICAL")
