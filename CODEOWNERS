@@ -1,0 +1,17 @@
+# Ownership — Royal-Sec rtai-suite
+* @royal-sec/core-team
+
+# Core library requires owner review on every change
+/rtai_core/ @royal-sec/core-team
+/.github/workflows/ @royal-sec/core-team
+
+# Legal / compliance docs require legal + core review
+/EULA.md @royal-sec/core-team @royal-sec/legal
+/AUP.md @royal-sec/core-team @royal-sec/legal
+/PRIVACY.md @royal-sec/core-team @royal-sec/legal
+/DPA.md @royal-sec/core-team @royal-sec/legal
+/EXPORT_CONTROL.md @royal-sec/core-team @royal-sec/legal
+/TRADEMARK.md @royal-sec/core-team @royal-sec/legal
+/NOTICE.md @royal-sec/core-team
+/SECURITY.md @royal-sec/core-team @royal-sec/legal
+/docs/legal/ @royal-sec/core-team @royal-sec/legal

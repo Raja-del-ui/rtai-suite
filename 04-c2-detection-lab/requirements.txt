@@ -1,0 +1,1 @@
+# P4 runtime deps: Python standard library only. Fully offline-capable.

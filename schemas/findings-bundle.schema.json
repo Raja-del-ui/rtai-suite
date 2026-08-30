@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rtai.local/schemas/findings-bundle.json",
+  "title": "Findings Bundle",
+  "type": "object",
+  "required": ["company", "stats", "findings"],
+  "properties": {
+    "company": {"type": "string", "minLength": 1},
+    "assessment_type": {"type": "string"},
+    "stats": {
+      "type": "object",
+      "required": ["total", "hosts", "by_severity"],
+      "properties": {
+        "total": {"type": "integer", "minimum": 0},
+        "hosts": {"type": "integer", "minimum": 0},
+        "by_severity": {
+          "type": "object",
+          "required": ["critical", "high", "medium", "low", "info"],
+          "additionalProperties": {"type": "integer", "minimum": 0}
+        }
+      }
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["ref", "tool", "host", "location", "title", "severity"],
+        "properties": {
+          "ref": {"type": "string", "pattern": "^F-\\d{3}$"},
+          "tool": {"enum": ["nmap", "nuclei", "nessus"]},
+          "host": {"type": "string"},
+          "hostname": {"type": "string"},
+          "location": {"type": "string"},
+          "title": {"type": "string", "minLength": 1},
+          "severity": {"enum": ["critical", "high", "medium", "low", "info", "unknown"]},
+          "cve": {"type": ["string", "null"]},
+          "correlated_service": {"type": ["object", "null"]}
+        }
+      }
+    }
+  }
+}

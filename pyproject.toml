@@ -1,0 +1,73 @@
+[project]
+name = "royal-sec-rtai-suite"
+version = "4.0.0"
+description = "Royal-Sec rtai-suite — Five AI-integrated, authorized-use red-team tools (recon, injection fuzzer, phishing-awareness sim, C2 detection lab, pentest report copilot) with hardened API, audit chain, and air-gap deployment"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "Royal-Sec Ltd", email = "legal@royal-sec.com" }]
+maintainers = [{ name = "Royal-Sec Core Team", email = "security@royal-sec.com" }]
+keywords = ["red-team", "llm-security", "offensive-security", "audit", "royal-sec"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Information Technology",
+    "Intended Audience :: System Administrators",
+    "Intended Audience :: Telecommunications Industry",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Security",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Environment :: Console",
+]
+dependencies = []
+
+[project.optional-dependencies]
+recon = ["dnspython>=2.6"]
+report = ["jinja2>=3.1"]
+contracts = ["jsonschema>=4.20"]
+slides = ["python-pptx>=1.0"]
+gui = ["PySide6>=6.6"]
+dev = ["pytest>=8", "pytest-cov>=5", "ruff>=0.5", "mypy>=1.10",
+       "jsonschema>=4.20", "python-pptx>=1.0"]
+
+[project.urls]
+Homepage = "https://royal-sec.com"
+Documentation = "https://royal-sec.com/docs"
+Repository = "https://github.com/royal-sec/rtai-suite"
+Issues = "https://github.com/royal-sec/rtai-suite/issues"
+Changelog = "https://github.com/royal-sec/rtai-suite/blob/main/CHANGELOG.md"
+
+[project.scripts]
+rtai = "rtai_core.cli_app:main"
+rtai-gui = "rtai_core.gui.launcher:main"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["rtai_core", "rtai_core.providers"]
+
+[tool.pytest.ini_options]
+testpaths = [
+    "tests",
+    "01-ai-recon-agent/tests",
+    "02-llm-injection-fuzzer/tests",
+    "03-phishing-awareness-sim/tests",
+    "04-c2-detection-lab/tests",
+    "05-pentest-report-copilot/tests",
+]
+addopts = "-q"
+markers = [
+    "integration: requires live network/LLM backends (deselect with -m 'not integration')",
+]
+
+[tool.coverage.run]
+source = ["rtai_core", "01-ai-recon-agent", "02-llm-injection-fuzzer",
+          "03-phishing-awareness-sim", "04-c2-detection-lab",
+          "05-pentest-report-copilot"]
+omit = ["*/tests/*", "*/llm_client.py"]

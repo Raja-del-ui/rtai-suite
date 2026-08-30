@@ -1,0 +1,2 @@
+# P1 runtime deps (Windows + Linux)
+dnspython>=2.6

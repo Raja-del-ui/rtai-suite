@@ -1,0 +1,32 @@
+# Local platform stack: API gateway + optional local LLM backend.
+#   docker compose up api                 -> hardened API on :9000
+#   docker compose --profile llm up       -> also run Ollama on :11434
+
+services:
+  api:
+    build: .
+    ports:
+      - "9000:9000"
+    environment:
+      RTAI_API_TOKEN: ${RTAI_API_TOKEN:-}
+      RTAI_RATE_LIMIT: "60"
+      RTAI_REQUIRE_AUTH: ${RTAI_REQUIRE_AUTH:-0}
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request as u; u.urlopen('http://127.0.0.1:9000/health', timeout=2)"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 10s
+
+  ollama:
+    image: ollama/ollama:latest
+    profiles: ["llm"]
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_models:/root/.ollama
+    restart: unless-stopped
+
+volumes:
+  ollama_models:

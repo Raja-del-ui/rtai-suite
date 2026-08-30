@@ -1,0 +1,12 @@
+{
+  "company": "Acme Corp",
+  "sender_domain": "acme-secure.example",
+  "landing_base_url": "http://127.0.0.1:8000",
+  "attested_by": "Jane Doe, Head of IT Security (approval memo #2026-114)",
+  "recipients": [
+    "alice.anderson@acme-corp.example",
+    "bob.brown@acme-corp.example"
+  ],
+  "allow_send": false,
+  "smtp": null
+}

@@ -1,0 +1,32 @@
+name: release
+
+on:
+  push:
+    tags: ["v*"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install build
+      - name: Generate SBOM and SLSA provenance
+        run: |
+          pip install -e .
+          python -m rtai_core.military_sbom --project . --output sbom-output --formats cyclonedx spdx --slsa
+          ls -lh sbom-output/
+      - name: Build sdist and wheel
+        run: python -m build
+      - name: Smoke-test wheel in clean env
+        run: |
+          pip install dist/*.whl dnspython jinja2
+          python -c "import rtai_core; print('shipped', rtai_core.__version__)"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: distributions
+          path: |
+            dist/*
+            sbom-output/*

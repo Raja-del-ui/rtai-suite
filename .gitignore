@@ -1,0 +1,38 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+.coverage
+.venv/
+venv/
+.env
+*.egg-info/
+dist/
+build/
+site_test/
+
+# generated artifacts
+01-ai-recon-agent/raw_findings.json
+01-ai-recon-agent/recon_report.md
+02-llm-injection-fuzzer/injection_report.md
+03-phishing-awareness-sim/out/
+03-phishing-awareness-sim/campaign.json
+03-phishing-awareness-sim/clicks.jsonl
+03-phishing-awareness-sim/metrics.md
+03-phishing-awareness-sim/test_links.csv
+04-c2-detection-lab/beacons.jsonl
+04-c2-detection-lab/detection_report.md
+05-pentest-report-copilot/report.md
+*_v2.md
+
+# audit & runtime
+audit.log
+*.log
+*.db
+*.jsonl
+# keep samples: ignore generated jsonl/db but track samples/
+!samples/**/*.jsonl
+!samples/**/*.db
+
+# secrets
+*_secret*
+config.local.json

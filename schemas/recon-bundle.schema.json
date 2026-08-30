@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rtai.local/schemas/recon-bundle.json",
+  "title": "Reconnaissance Bundle",
+  "type": "object",
+  "required": ["target", "generated", "exposure", "evidence"],
+  "properties": {
+    "target": {"type": "string", "pattern": "^([a-z0-9-]+\\.)+[a-z]{2,}$"},
+    "generated": {"type": "string"},
+    "changes_since_baseline": {"type": "array", "items": {"type": "string"}},
+    "exposure": {
+      "type": "object",
+      "required": ["score", "band"],
+      "properties": {
+        "score": {"type": "number", "minimum": 0, "maximum": 100},
+        "band": {"enum": ["LOW", "MEDIUM", "HIGH", "CRITICAL"]},
+        "drivers": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "prefixItems": [
+              {"type": "string"}, {"type": "number"}, {"type": "string"}
+            ],
+            "minItems": 3, "maxItems": 3
+          }
+        }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "required": ["target", "sources"],
+      "properties": {
+        "target": {"type": "string"},
+        "sources": {"type": "object"},
+        "warnings": {"type": "array", "items": {"type": "string"}}
+      }
+    }
+  }
+}

@@ -1,0 +1,3 @@
+token,recipient,template,file
+tok1,a@x,password_expiry,s1.eml
+tok2,b@x,password_expiry,s2.eml

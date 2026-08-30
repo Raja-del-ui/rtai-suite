@@ -1,0 +1,2 @@
+# P2 runtime deps: Python standard library only.
+# Optional dev tools: pytest, ruff
