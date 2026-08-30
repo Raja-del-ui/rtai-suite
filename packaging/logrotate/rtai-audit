@@ -1,0 +1,18 @@
+/var/log/royal-sec/audit.log {
+    daily
+    rotate 90
+    compress
+    delaycompress
+    missingok
+    notifempty
+    create 600 rtai rtai
+    sharedscripts
+    postrotate
+        # Verify hash chain after rotation; alert on tamper
+        /usr/local/bin/python -c "from rtai_core.audit import AuditChain; ok,line=AuditChain('/var/log/royal-sec/audit.log').verify(); exit(0 if ok else 1)" || logger -t rtai-audit "WORM verify failed at line %line"
+        # Forward to SIEM if configured
+        if [ -n "$RTAI_SIEM_URL" ]; then
+            tail -n 100 /var/log/royal-sec/audit.log | curl -s -X POST -H "Content-Type: application/json" --data-binary @- "$RTAI_SIEM_URL" || true
+        fi
+    endscript
+}

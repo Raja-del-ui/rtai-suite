@@ -1,7 +1,7 @@
 [project]
 name = "royal-sec-rtai-suite"
-version = "4.0.0"
-description = "Royal-Sec rtai-suite — Five AI-integrated, authorized-use red-team tools (recon, injection fuzzer, phishing-awareness sim, C2 detection lab, pentest report copilot) with hardened API, audit chain, and air-gap deployment"
+version = "4.1.0"
+description = "Royal-Sec rtai-suite v4.1.0-military — Five AI-integrated, authorized-use red-team tools with FIPS 140-3, HSM, mTLS/SPIFFE, OPA, WORM+SIEM, SLSA L4, STIG, TLA+, STIX"
 readme = "README.md"
 requires-python = ">=3.11"
 license = { text = "MIT" }

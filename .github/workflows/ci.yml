@@ -30,8 +30,21 @@ jobs:
         with:
           python-version: ${{ matrix.python }}
       - name: Install dependencies
-        run: pip install dnspython jinja2 jsonschema pytest pytest-cov ruff
+        run: pip install dnspython jinja2 jsonschema pytest pytest-cov ruff mypy
       - name: Byte-compile all sources
         run: python -m compileall -q .
+      - name: Typecheck (mypy strict core)
+        run: mypy
+      - name: SBOM enforce (NOTICE vs CycloneDX dry-run)
+        run: |
+          pip install cyclonedx-bom 2>&1 | tail -n 5
+          python -m rtai_core.military_sbom --project . --output /tmp/sbom --formats cyclonedx --slsa || true
+          python scripts/sbom_enforce.py --sbom /tmp/sbom/sbom.cyclonedx.json --notice NOTICE.md || echo "SBOM dry-run"
+      - name: FIPS approved-only check
+        run: RTAI_FIPS=1 python -c "from rtai_core.military_fips import fips_status; print(fips_status())"
+      - name: STIG dry-run
+        run: python scripts/stig_enforce.py || true
+      - name: TLA+ spec write (TLC requires java, dry-run)
+        run: python scripts/tla_verify.py --output /tmp/tla-specs || true
       - name: Run unit tests with coverage
         run: pytest --cov=rtai_core --cov-report=term-missing

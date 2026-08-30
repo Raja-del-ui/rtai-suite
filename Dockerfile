@@ -22,9 +22,14 @@ COPY services ./services
 COPY schemas ./schemas
 COPY conftest.py ./
 COPY LICENSE NOTICE.md EULA.md AUP.md PRIVACY.md DPA.md EXPORT_CONTROL.md TRADEMARK.md TERMS.md ./
-RUN pip install --no-cache-dir "dnspython>=2.6" "jinja2>=3.1" \
+COPY packaging/logrotate/rtai-audit /etc/logrotate.d/rtai-audit 2>/dev/null || true
+# Military hardening: FIPS check (RHEL UBI would run fips-mode-setup --enable), STIG perms, mTLS cert dir
+RUN pip install --no-cache-dir "dnspython>=2.6" "jinja2>=3.1" cryptography \
     && useradd --create-home --shell /bin/bash rtai \
-    && chown -R rtai:rtai /app
+    && mkdir -p /var/log/royal-sec /certs /policies && chown -R rtai:rtai /app /var/log/royal-sec /certs /policies \
+    && chmod 750 /var/log/royal-sec && chmod 600 /etc/logrotate.d/rtai-audit 2>/dev/null || true
+# Optional FIPS validation at build time (fails open if openssl not FIPS)
+RUN python -c "from rtai_core.military_fips import fips_status; print(fips_status())" || true
 USER rtai
 EXPOSE 8080 9000
 HEALTHCHECK --interval=30s --timeout=3s --retries=3 \

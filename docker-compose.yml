@@ -11,6 +11,21 @@ services:
       RTAI_API_TOKEN: ${RTAI_API_TOKEN:-}
       RTAI_RATE_LIMIT: "60"
       RTAI_REQUIRE_AUTH: ${RTAI_REQUIRE_AUTH:-0}
+      RTAI_FIPS: ${RTAI_FIPS:-0}
+      RTAI_AUDIT_WORM: ${RTAI_AUDIT_WORM:-0}
+      RTAI_SIEM_URL: ${RTAI_SIEM_URL:-}
+      RTAI_ATTEST_KEY: ${RTAI_ATTEST_KEY:-}
+      RTAI_HSM_REQUIRED: ${RTAI_HSM_REQUIRED:-0}
+      RTAI_OPA_POLICY: ${RTAI_OPA_POLICY:-}
+      RTAI_TLS_CERT: ${RTAI_TLS_CERT:-}
+      RTAI_TLS_KEY: ${RTAI_TLS_KEY:-}
+      RTAI_TLS_CA: ${RTAI_TLS_CA:-}
+      RTAI_TPM_ATTEST: ${RTAI_TPM_ATTEST:-0}
+      RTAI_AUDIT_LOG: /var/log/royal-sec/audit.log
+    volumes:
+      - audit_log:/var/log/royal-sec
+      - ./certs:/certs:ro
+      - ./policies:/policies:ro
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request as u; u.urlopen('http://127.0.0.1:9000/health', timeout=2)"]
@@ -18,6 +33,11 @@ services:
       timeout: 3s
       retries: 3
       start_period: 10s
+    # Military hardening: uncomment for STIG
+    # read_only: true
+    # security_opt: ["no-new-privileges:true"]
+    # cap_drop: ["ALL"]
+    # cap_add: ["CHOWN","SETUID","SETGID"]
 
   ollama:
     image: ollama/ollama:latest
@@ -30,3 +50,4 @@ services:
 
 volumes:
   ollama_models:
+  audit_log:

@@ -10,16 +10,16 @@ from typing import Optional
 from urllib.parse import urljoin
 
 
-@dataclass
+@dataclass(kw_only=True)
 class STIXObject:
-    type: str
-    id: str
-    created: str
-    modified: str
+    type: str = "indicator"
+    id: str = field(default_factory=lambda: f"indicator--{uuid.uuid4()}")
+    created: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+    modified: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
     spec_version: str = "2.1"
 
 
-@dataclass
+@dataclass(kw_only=True)
 class Indicator(STIXObject):
     pattern: str = ""
     pattern_type: str = "stix"
@@ -30,9 +30,9 @@ class Indicator(STIXObject):
     kill_chain_phases: list[dict] = field(default_factory=list)
 
 
-@dataclass
+@dataclass(kw_only=True)
 class Malware(STIXObject):
-    name: str
+    name: str = ""
     description: str = ""
     malware_types: list[str] = field(default_factory=list)
     is_family: bool = False
@@ -40,17 +40,17 @@ class Malware(STIXObject):
     kill_chain_phases: list[dict] = field(default_factory=list)
 
 
-@dataclass
+@dataclass(kw_only=True)
 class AttackPattern(STIXObject):
-    name: str
+    name: str = ""
     description: str = ""
     kill_chain_phases: list[dict] = field(default_factory=list)
     external_references: list[dict] = field(default_factory=list)
 
 
-@dataclass
+@dataclass(kw_only=True)
 class ThreatActor(STIXObject):
-    name: str
+    name: str = ""
     description: str = ""
     aliases: list[str] = field(default_factory=list)
     goals: list[str] = field(default_factory=list)
@@ -59,9 +59,9 @@ class ThreatActor(STIXObject):
     primary_motivation: str = "unknown"
 
 
-@dataclass
+@dataclass(kw_only=True)
 class Campaign(STIXObject):
-    name: str
+    name: str = ""
     description: str = ""
     aliases: list[str] = field(default_factory=list)
     first_seen: Optional[str] = None
@@ -69,9 +69,9 @@ class Campaign(STIXObject):
     objective: str = ""
 
 
-@dataclass
+@dataclass(kw_only=True)
 class IntrusionSet(STIXObject):
-    name: str
+    name: str = ""
     description: str = ""
     aliases: list[str] = field(default_factory=list)
     goals: list[str] = field(default_factory=list)
@@ -79,9 +79,9 @@ class IntrusionSet(STIXObject):
     primary_motivation: str = "unknown"
 
 
-@dataclass
+@dataclass(kw_only=True)
 class CourseOfAction(STIXObject):
-    name: str
+    name: str = ""
     description: str = ""
     action: str = ""
 

@@ -278,6 +278,33 @@ class ApiHandler(BaseHTTPRequestHandler):
             audit_record("rate_limited", actor=self._client_ip())
         return allowed
 
+    def _opa_allowed(self, method: str, path: str) -> bool:
+        opa_dir = self.api_config.get("opa_policy") or os.environ.get("RTAI_OPA_POLICY", "")
+        if not opa_dir:
+            return True  # OPA not configured — allow (bearer already checked)
+        try:
+            from rtai_core.military_opa import OPAPolicyEngine
+            engine = OPAPolicyEngine(policy_dir=Path(opa_dir)) if Path(opa_dir).exists() else OPAPolicyEngine()
+            # Determine scopes from token — simplified: bearer valid => scopes from env RTAI_SCOPES
+            scopes = os.environ.get("RTAI_SCOPES", "recon:read,recon:write,jobs:read,fuzz:execute").split(",")
+            input_data = {
+                "method": method,
+                "path": path.split("?")[0],
+                "auth": {"valid": self._authorized(), "scopes": scopes},
+                "source": {"ip": self._client_ip()},
+                "mtls": bool(self.api_config.get("tls_cert")),
+                "rate": 0,
+            }
+            decision = engine.evaluate("zero_trust", input_data)
+            if not decision.allowed:
+                audit_record("opa_denied", actor=self._client_ip(), path=path, reason=decision.reason)
+                return False
+            return True
+        except Exception as e:
+            LOG.warning("OPA evaluation failed (fail-open for availability, audited): %s", e)
+            audit_record("opa_error", actor=self._client_ip(), path=path, reason=str(e)[:120])
+            return True
+
     def _read_json(self):
         clen_raw = self.headers.get("Content-Length") or "0"
         try:
@@ -298,6 +325,9 @@ class ApiHandler(BaseHTTPRequestHandler):
         if not self._rate_ok():
             return self._send(429, {"error": "rate limit exceeded"})
         route = self.path.split("?")[0].rstrip("/") or "/"
+        # OPA zero-trust check (if RTAI_OPA_POLICY set) — runs after rate but before auth routing
+        if not self._opa_allowed("GET", route):
+            return self._send(403, {"error": "OPA policy denied"})
         if route == "/health":
             return self._send(200, {"status": "ok", "version": __version__})
         if route == "/version":
@@ -329,6 +359,8 @@ class ApiHandler(BaseHTTPRequestHandler):
         if not self._authorized():
             return self._send(401, {"error": "missing or invalid bearer token"})
         route = self.path.split("?")[0]
+        if not self._opa_allowed("POST", route):
+            return self._send(403, {"error": "OPA policy denied"})
         try:
             payload = self._read_json()
         except ValueError as exc:
@@ -393,7 +425,8 @@ class ApiHandler(BaseHTTPRequestHandler):
 
 
 def create_server(host="127.0.0.1", port=9000, token="", limit_per_minute=60,
-                  recon_runner=None, db_path=None, workers=2, require_auth=False):
+                  recon_runner=None, db_path=None, workers=2, require_auth=False,
+                  tls_cert=None, tls_key=None, tls_ca=None, spiffe_id=None):
     store = None
     if db_path:
         from rtai_core.storage import SqliteEventStore
@@ -406,13 +439,32 @@ def create_server(host="127.0.0.1", port=9000, token="", limit_per_minute=60,
         "started": time.time(),
         "jobs": JobManager(workers=workers, store=store),
         "require_auth": require_auth,
+        "tls_cert": tls_cert,
+        "tls_key": tls_key,
+        "tls_ca": tls_ca,
+        "spiffe_id": spiffe_id,
+        "opa_policy": os.environ.get("RTAI_OPA_POLICY", ""),
     }
+    # mTLS wiring — if cert/key provided, wrap socket with MTLSContextManager
+    if tls_cert and tls_key:
+        try:
+            from rtai_core.military_mtls import MTLSContextManager
+            mtls = MTLSContextManager(Path(tls_cert), Path(tls_key), Path(tls_ca) if tls_ca else None)
+            ctx = mtls.get_server_context()
+            server.socket = ctx.wrap_socket(server.socket, server_side=True)
+            LOG.info("mTLS enabled: cert=%s ca=%s spiffe=%s", tls_cert, tls_ca, spiffe_id)
+            audit_record("mtls_enabled", actor="system", cert=str(tls_cert), spiffe_id=spiffe_id or "")
+        except Exception as e:
+            LOG.error("mTLS setup failed: %s", e)
+            raise SystemExit(f"[x] mTLS setup failed: {e}")
+    elif os.environ.get("RTAI_MTLS") == "1":
+        LOG.warning("RTAI_MTLS=1 but no --tls-cert/--tls-key provided — running plaintext (dev only)")
     server.daemon_threads = True
     return server
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="rtai-api microservice")
+    parser = argparse.ArgumentParser(description="rtai-api microservice — Royal-Sec military-grade (mTLS/SPIFFE, FIPS, OPA)")
     parser.add_argument("--host", default="127.0.0.1")
     parser.add_argument("--port", type=int, default=9000)
     parser.add_argument("--token", default="",
@@ -423,11 +475,35 @@ def main() -> int:
     parser.add_argument("--workers", type=int, default=2)
     parser.add_argument("--require-auth", action="store_true",
                         help="fail-closed: require RTAI_API_TOKEN (recommended for Royal-Sec commercial deployments)")
+    parser.add_argument("--tls-cert", default=os.environ.get("RTAI_TLS_CERT", ""),
+                        help="path to TLS server cert (enables mTLS via rtai_core/military_mtls.py)")
+    parser.add_argument("--tls-key", default=os.environ.get("RTAI_TLS_KEY", ""),
+                        help="path to TLS server key")
+    parser.add_argument("--tls-ca", default=os.environ.get("RTAI_TLS_CA", ""),
+                        help="path to TLS CA bundle for client cert verification")
+    parser.add_argument("--spiffe-id", default=os.environ.get("RTAI_SPIFFE_ID", ""),
+                        help="expected SPIFFE ID for workload attestation (e.g., spiffe://royal-sec/ns/api/svc)")
+    parser.add_argument("--fips", action="store_true",
+                        help="enable FIPS 140-3 approved-only mode (RTAI_FIPS=1, see rtai_core/military_fips.py)")
+    parser.add_argument("--opa-policy", default=os.environ.get("RTAI_OPA_POLICY", ""),
+                        help="path to OPA Rego bundle dir (rtai_core/military_opa.py)")
     parser.add_argument("--verbose", action="store_true")
     args = parser.parse_args()
 
     setup_logging(verbose=args.verbose)
-    token = args.token or os.environ.get("RTAI_API_TOKEN", "")
+    # FIPS mode
+    if args.fips or os.environ.get("RTAI_FIPS") == "1":
+        os.environ["RTAI_FIPS"] = "1"
+        from rtai_core.military_fips import fips_status
+        LOG.info("FIPS mode: %s", fips_status())
+        audit_record("fips_enabled", actor="system", status=str(fips_status()))
+    # HSM-aware secret fetch (Vault/TPM/HSM/file/env, fail-closed if RTAI_HSM_REQUIRED=1)
+    try:
+        from rtai_core.military_hsm import get_secret
+        token = args.token or get_secret("RTAI_API_TOKEN", "")
+    except RuntimeError as e:
+        LOG.error("HSM fail-closed: %s", e)
+        return 74
     require_auth = args.require_auth or os.environ.get("RTAI_REQUIRE_AUTH") == "1"
     if not token:
         if require_auth:
@@ -435,10 +511,27 @@ def main() -> int:
             return 74
         LOG.warning("RTAI_API_TOKEN not set - API is OPEN (development mode only). "
                     "For Royal-Sec commercial use, set RTAI_API_TOKEN and --require-auth")
+    # TPM attestation pre-flight if requested
+    if os.environ.get("RTAI_TPM_ATTEST") == "1":
+        try:
+            from rtai_core.military_tpm import TPM2Interface, TPMRemoteAttestation
+            tpm = TPM2Interface()
+            pcrs = tpm.get_pcr_values()
+            LOG.info("TPM PCRs: %s", pcrs[:2])
+            audit_record("tpm_attested", actor="system", pcrs=str(pcrs[:2]))
+        except Exception as e:
+            LOG.warning("TPM attestation requested but failed: %s (continuing, audit logged)", e)
+            audit_record("tpm_attest_failed", actor="system", reason=str(e)[:120])
+    # OPA env wiring
+    if args.opa_policy:
+        os.environ["RTAI_OPA_POLICY"] = args.opa_policy
     server = create_server(args.host, args.port, token=token,
                            limit_per_minute=args.limit_per_minute,
-                           db_path=args.db, workers=args.workers, require_auth=require_auth)
-    LOG.info("listening on http://%s:%d (docs: /openapi.json)", args.host, args.port)
+                           db_path=args.db, workers=args.workers, require_auth=require_auth,
+                           tls_cert=args.tls_cert or None, tls_key=args.tls_key or None,
+                           tls_ca=args.tls_ca or None, spiffe_id=args.spiffe_id or None)
+    scheme = "https" if args.tls_cert else "http"
+    LOG.info("listening on %s://%s:%d (docs: /openapi.json) fips=%s mtls=%s opa=%s", scheme, args.host, args.port, bool(args.fips or os.environ.get("RTAI_FIPS")), bool(args.tls_cert), bool(args.opa_policy))
     try:
         server.serve_forever()
     except KeyboardInterrupt:

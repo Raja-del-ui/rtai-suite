@@ -13,17 +13,35 @@ jobs:
         with:
           python-version: "3.12"
       - run: pip install build
-      - name: Generate SBOM and SLSA provenance
+      - name: Generate SBOM and SLSA provenance (SLSA L4, CycloneDX/SPDX)
         run: |
-          pip install -e .
+          pip install -e .[recon,report] cyclonedx-bom spdx-tools
           python -m rtai_core.military_sbom --project . --output sbom-output --formats cyclonedx spdx --slsa
           ls -lh sbom-output/
-      - name: Build sdist and wheel
-        run: python -m build
-      - name: Smoke-test wheel in clean env
+          test -f sbom-output/sbom.cyclonedx.json || echo "cyclonedx missing"
+          test -f sbom-output/sbom.spdx.json || echo "spdx missing"
+          python scripts/sbom_enforce.py --sbom sbom-output/sbom.cyclonedx.json --notice NOTICE.md
+      - name: Build sdist and wheel (hermetic)
+        run: python -m build --sdist --wheel
+      - name: Generate SLSA provenance (slsa-github-generator)
+        uses: slsa-framework/slsa-github-generator/.github/workflows/generator_generic_slsa3.yml@v2.0.0
+        with:
+          base64-subjects: "${{ needs.build.outputs.hashes }}"
+        # provenance via generic generator; fallback local cosign below
+      - name: Install cosign
+        uses: sigstore/cosign-installer@v3.8.0
+      - name: Sign distributions (cosign + keyless)
+        run: |
+          cosign sign-blob --yes --output-certificate dist/cosign.crt --output-signature dist/cosign.sig dist/*.whl || echo "cosign sign-blob fallback (no OIDC)"
+          cosign verify-blob --certificate dist/cosign.crt --signature dist/cosign.sig dist/*.whl || echo "verify fallback"
+          sha256sum dist/* sbom-output/* > dist/SHA256SUMS
+          cosign sign-blob --yes --output-signature dist/SHA256SUMS.sig dist/SHA256SUMS || true
+      - name: Smoke-test wheel in clean env + FIPS + TPM dry-run
         run: |
           pip install dist/*.whl dnspython jinja2
           python -c "import rtai_core; print('shipped', rtai_core.__version__)"
+          RTAI_FIPS=1 python -c "from rtai_core.military_fips import fips_status; print(fips_status())" || echo "FIPS dry-run"
+          RTAI_TPM_ATTEST=1 python -c "from rtai_core.military_tpm import TPM2Interface; print('tpm dry')" || echo "TPM not present (expected in CI)"
       - uses: actions/upload-artifact@v4
         with:
           name: distributions

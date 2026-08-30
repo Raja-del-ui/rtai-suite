@@ -26,6 +26,14 @@ def _canonical(record: dict) -> str:
 
 
 def _digest(payload: str) -> str:
+    # FIPS-aware: when RTAI_FIPS=1, enforce approved hash (sha256 is approved)
+    try:
+        from rtai_core.military_fips import check_hash
+        chk = check_hash("sha256")
+        if not chk.allowed:
+            raise ValueError(f"FIPS denies sha256: {chk.reason}")
+    except ImportError:
+        pass
     return hashlib.sha256(payload.encode()).hexdigest()
 
 
@@ -81,6 +89,35 @@ class AuditChain:
             except Exception:
                 with self.path.open("a", encoding="utf-8") as fh:
                     fh.write(json.dumps(entry, default=str) + "\n")
+            # WORM hardening: if RTAI_AUDIT_WORM=1, set append-only (Linux chattr +a) or 400 perms
+            if os.environ.get("RTAI_AUDIT_WORM") == "1":
+                try:
+                    import subprocess
+                    # Try chattr +a (requires root, best-effort)
+                    subprocess.run(["chattr", "+a", str(self.path)], capture_output=True, timeout=1)
+                    # Also set 600 perms with owner-only write
+                    self.path.chmod(0o600)
+                except Exception:
+                    try:
+                        self.path.chmod(0o400)
+                    except Exception:
+                        pass
+            # SIEM forwarder: if RTAI_SIEM_URL set, POST JSON (best-effort, never break audit)
+            siem = os.environ.get("RTAI_SIEM_URL")
+            if siem:
+                try:
+                    import urllib.request, urllib.error
+                    data = json.dumps(entry).encode()
+                    req = urllib.request.Request(siem, data=data, headers={"Content-Type": "application/json"}, method="POST")
+                    # Use short timeout, ignore failures
+                    with urllib.request.urlopen(req, timeout=2) as resp:
+                        pass
+                except Exception:
+                    try:
+                        from rtai_core.logging_utils import get_logger
+                        get_logger("audit").warning("SIEM forward failed to %s", siem)
+                    except Exception:
+                        pass
         return entry
 
     def read(self) -> list[dict]:

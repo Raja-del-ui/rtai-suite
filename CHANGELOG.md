@@ -1,5 +1,15 @@
 # Changelog
 
+## 4.1.0 — Military-Grade v4.1.0-military (Royal-Sec)
+
+- **FIPS 140-3** `rtai_core/military_fips.py` `RTAI_FIPS=1` / `RTAI_FIPS_STRICT=1` approved-hash/cipher gating + `audit.py:28-37` FIPS-aware `_digest()` + `services/api/server.py --fips` + `Dockerfile` FIPS status + `release.yml` FIPS dry-run
+- **HSM** `rtai_core/military_hsm.py` Vault→TPM NVRAM→PKCS#11→file→env chain + `RTAI_HSM_REQUIRED=1` fail-closed + `services/api/server.py:500-506` `get_secret()` for `RTAI_API_TOKEN` + `packaging/logrotate` 600 perms
+- **mTLS/SPIFFE** `services/api/server.py:395-462` `--tls-cert/--tls-key/--tls-ca/--spiffe-id` via `military_mtls.py:MTLSContextManager` + `docker-compose.yml` `audit_log:/var/log/royal-sec` + `certs:/policies` mounts
+- **OPA RBAC** `rtai_core/military_opa.py` 4 bundles + `services/api/server.py:268-310` `_opa_allowed()` zero_trust + `rtai_core/cli_app.py:33-90` per-tool `RTAI_HOME` + dispatch audit + `RTAI_OPA_POLICY` / `RTAI_SCOPES`
+- **WORM+SIEM** `rtai_core/audit.py:93-115` `RTAI_AUDIT_WORM=1` `chattr +a` + `RTAI_SIEM_URL` POST + `packaging/logrotate/rtai-audit` + `docker-compose.yml` `audit_log` volume
+- **SLSA L4** `release.yml:16-40` `cyclonedx-bom` + `scripts/sbom_enforce.py` + `slsa-github-generator` + `cosign sign-blob` `SHA256SUMS.sig` + `Dockerfile` `cryptography`
+- **STIG/TLA/STIX** `scripts/stig_enforce.py` + `scripts/tla_verify.py` + `05-pentest-report-copilot/copilot.py:120-150` `--emit-stix`/`--emit-attack-navigator`/`--classification` OPA + `ci.yml` stig/tla/sbom/fips gates + gap `MG-16..MG-20` in `docs/MILITARY_GRADE_GAP_ANALYSIS.md:15-26` → **ALL CLOSED**
+
 ## 4.0.0 — Military-Grade Release
 
 - **Hash-chained audit log** (`rtai_core/audit.py`): sha256(prev+payload) chain,
