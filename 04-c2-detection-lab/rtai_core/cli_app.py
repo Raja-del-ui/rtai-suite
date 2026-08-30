@@ -26,6 +26,7 @@ TOOLS = {
     "c2-beacon": "04-c2-detection-lab/beacon.py",
     "c2-analyze": "04-c2-detection-lab/analyze.py",
     "report": "05-pentest-report-copilot/copilot.py",
+    "mission": "rtai_core/mission_cli.py",
     "gui": "rtai_core/gui/launcher.py",
 }
 

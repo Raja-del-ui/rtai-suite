@@ -1,0 +1,29 @@
+{
+  "mission_id": "OP-9178B90E",
+  "name": "TEST OP",
+  "callsign": "REAPER 06",
+  "grid_ref": "",
+  "classification": "CUI",
+  "caveat": "",
+  "caveats": [],
+  "approver": "COL Test",
+  "approver_rank": "",
+  "roe": {
+    "targets": [
+      "example.com"
+    ],
+    "techniques": [
+      "recon",
+      "fuzz",
+      "phish",
+      "c2",
+      "report"
+    ],
+    "start": "2026-08-30T22:54:01.783400+00:00",
+    "end": "2026-09-06T22:54:01.783411+00:00",
+    "window_tz": "UTC"
+  },
+  "opsec_checklist": {},
+  "created": "2026-08-30T22:54:01.783441+00:00",
+  "mde": ""
+}

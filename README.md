@@ -1,8 +1,7 @@
 ﻿# Royal-Sec — AI-Integrated Red Team Toolkit
 
-**v4.0 — Royal-Sec Military-Grade Release.** Five standalone tools on one engineered core (`rtai_core`),
-fronted by a hardened REST microservice, a unified `rtai` CLI, containers, schema
-contracts, and a full academic documentation suite.
+**v4.1.0-military — Royal-Sec Tactical Operations Console.** Five standalone tools on one engineered core (`rtai_core`),
+fronted by a hardened REST microservice (mTLS/SPIFFE, FIPS 140-3, OPA, HSM), a unified `rtai` CLI (`rtai mission` + 9 tools), **military-style GUI** (OD Green / Coyote / Black-Green HUD, classification banners, tactical map), containers, and STIX/TAXII + TLA+ + STIG.
 
 > **AUTHORIZATION REQUIRED — Royal-Sec Authorized Use Only** — Every tool here is for
 > **lab environments, CTFs, or engagements you are explicitly authorized to perform** (signed scope/ROE).
@@ -11,16 +10,16 @@ contracts, and a full academic documentation suite.
 > See `EULA.md`, `AUP.md`, `PRIVACY.md`, `SECURITY.md`, and `docs/SECURITY_AND_ETHICS.md` for binding terms.
 > Commercial use requires `legal@royal-sec.com` authorization and `RTAI_API_TOKEN` / `RTAI_ATTEST_KEY` configuration.
 
-## Platform Capabilities
+## Platform Capabilities — Military-Grade
 
-| Capability | Entry point |
-|---|---|
-| Unified CLI | `rtai --list`, then `rtai recon / fuzz / phish / c2-listen / c2-beacon / c2-analyze / report ...` |
-| REST API | `python services/api/server.py --port 9000` → `/health` `/version` `/metrics` `/v1/recon` |
-| Observability | Prometheus-format metrics at `/metrics`; structured JSON logs everywhere |
-| Containers | `docker build -t rtai-suite .` (non-root + healthcheck) · `docker compose up api` |
-| Schema contracts | `schemas/*.schema.json` enforced by contract tests |
-| Quality gates | pytest (91) · ruff · mypy(strict core) · compileall · CI matrix · release pipeline |
+| Capability | Entry point | Military |
+|---|---|---|
+| Unified CLI | `rtai --list`, then `rtai recon / fuzz / phish / c2-listen / c2-beacon / c2-analyze / report / mission ...` | `rtai mission --create --name "MANTICORE" --classification SECRET --targets example.com` |
+| REST API | `python services/api/server.py --port 9000` → `/health` `/version` `/metrics` `/v1/recon` | `RTAI_FIPS=1` `RTAI_TLS_CERT` `RTAI_OPA_POLICY` `RTAI_TPM_ATTEST=1` `RTAI_HSM_REQUIRED=1` |
+| Observability | Prometheus-format metrics at `/metrics`; structured JSON logs everywhere | `audit.log` **WORM** `chattr +a` + `RTAI_SIEM_URL` POST + `logrotate` `/var/log/royal-sec` |
+| Containers | `docker build -t rtai-suite .` (non-root + healthcheck) · `docker compose up api` | `audit_log:/var/log/royal-sec` + `certs:/policies` + `read_only`/`cap_drop` |
+| Schema contracts | `schemas/*.schema.json` enforced by contract tests | **STIX 2.1** `copilot --emit-stix bundle.json --classification CUI` + **ATT&CK Navigator** |
+| Quality gates | pytest (91) · ruff · mypy(strict core) · compileall · CI matrix · release pipeline | **FIPS** `military_fips.py`, **TLA+** `tla_verify.py`, **STIG** `stig_enforce.py`, **SLSA L4** `cosign` |
 
 ## Standalone Mode & OS Support
 
@@ -41,15 +40,26 @@ ships its `requirements.txt`, and runs on **Windows and Kali Linux** out of the 
   tests run via `pytest tests` inside each folder.
 - Unified CLI remains available repo-wide: `rtai --list`.
 
+## Military Operations Console (GUI) — OD Green / Tactical HUD
+
+**Launch:** `rtai-gui` or `rtai gui` — Tactical Operations Console v4.1.0-military
+
+- **Classification banners** top/bottom — `UNCLASS` (green `#007A33`) / `CUI` (purple `#502B85`) / `SECRET` (red `#C8102E`) / `TOP_SECRET` (orange `#FF6A00`) per `rtai_core/mission.py:14-22` `CLASS_BANNERS` + `CLASS_COLORS`, driven by `missions/*.json` or `RTAI_CLASSIFICATION`
+- **Header:** `◆ RTAI // TACTICAL OPS` + encryption LEDs `FIPS/mTLS/TPM/WORM/HSM` (`rtai_core/gui/launcher.py:19-45` now OD Green `#1A261A` + `style.py:MILITARY_QSS`)
+- **Tactical Dashboard** `◆ TACTICAL` tab: mission selector (`missions/index.json`), **tactical map** `TacticalMapWidget` (grid, crosshair, BFT: REAPER 06 / TARGET ALPHA / FOB HAMMER, MGRS `38TLL 1234 5678`, ZULU), **OPSEC** (`ROE signed/validated`), **ENCRYPTION** (`FIPS/mTLS/PQC`), **AUDIT** (`WORM/SIEM`), **STIX** (12 indicators), **TLA+/STIG** (3 specs verified) — `launcher.py:TacticalMapWidget` + `_tactical_dashboard_tab()`
+- **Mission tab** `rtai_core/gui/mission_gui.py:1-100` — create `OP-XXXX` with classification/caveat/ROE/approver/grid, `MISSION PACKAGE` (STIX+SBOM+audit), `OPSEC CHECK`; CLI `rtai mission --create --name "MANTICORE SHIELD" --classification SECRET --caveat NOFORN --targets example.com`
+- **STIX tab** `rtai_core/gui/stix_gui.py:1-100` — TAXII fetch + `STIXBuilder` indicator generation + ATT&CK Navigator `layer.json` (`military_stix.py:226-415`)
+- **Reports:** `copilot --classification SECRET` embeds **classification banner** top/bottom (`report.md.j2:1-5` + `report.html.j2:1-5` `classification_banner`/`classification_color`) + handling `DESTROY BY ANY METHOD...`
+
 ## Quality Gates
 
 | Gate | Status |
 |---|---|
-| Tests | 91 offline unit tests (`python -m pytest` or `python scripts/dev.py test`) |
-| Lint | ruff gate (`python scripts/dev.py lint`) |
-| CI | GitHub Actions: lint job + Ubuntu/Windows x Python 3.11/3.13 with coverage |
-| Packaging | installable shared library: `pip install -e .` |
-| Docs | Proposal · slides · study guide · runbook · rubric · threat model |
+| Tests | 91 offline unit tests (`python -m pytest` or `python scripts/dev.py test`) + STIX Navigator + mission |
+| Lint | ruff gate (`python scripts/dev.py lint`) — military modules `military_fips.py`/`military_hsm.py` |
+| CI | GitHub Actions: lint + typecheck + SBOM enforce + FIPS + STIG + TLA + Ubuntu/Windows x 3.11/3.13 with coverage |
+| Packaging | installable shared library: `pip install -e .[dev,recon,report,gui]` → `royal-sec-rtai-suite:4.1.0` |
+| Docs | EULA/AUP/Privacy/DPA/Export/Trademark + TLA+ specs + STIG profiles + STIX bundles |
 
 ## Architecture: rtai_core Shared Library
 

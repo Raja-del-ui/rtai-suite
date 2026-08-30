@@ -1,0 +1,30 @@
+{
+  "mission_id": "OP-EE730DD8",
+  "name": "MANTICORE SHIELD",
+  "callsign": "REAPER 06",
+  "grid_ref": "38TLL 1234 5678",
+  "classification": "SECRET",
+  "caveat": "NOFORN",
+  "caveats": [],
+  "approver": "COL Smith",
+  "approver_rank": "O-6",
+  "roe": {
+    "targets": [
+      "example.com",
+      "10.0.0.1/24"
+    ],
+    "techniques": [
+      "recon",
+      "fuzz",
+      "phish",
+      "c2",
+      "report"
+    ],
+    "start": "2026-08-30T22:56:10.017803+00:00",
+    "end": "2026-09-06T22:56:10.017815+00:00",
+    "window_tz": "UTC"
+  },
+  "opsec_checklist": {},
+  "created": "2026-08-30T22:56:10.017849+00:00",
+  "mde": ""
+}
