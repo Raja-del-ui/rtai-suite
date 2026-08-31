@@ -17,7 +17,7 @@ class FuzzerGUI(QWidget):  # type: ignore
     def _build(self):
         lay=QVBoxLayout(self); lay.setContentsMargins(16,16,16,16); lay.setSpacing(12)
         hdr=QLabel("Injection Fuzzer  —  Adaptive prompt-injection with judge & mutation")
-        hdr.setFont(QFont("Segoe UI",11,QFont.Weight.Bold)); hdr.setStyleSheet("color: #C2B280; letter-spacing: 0.8px;")
+        hdr.setFont(QFont("Share Tech Mono",11,QFont.Weight.Bold)); hdr.setStyleSheet("color: #C2B280; letter-spacing: 0.8px;")
         lay.addWidget(hdr)
         g1=QGroupBox("Target"); f1=QFormLayout(g1)
         self.url=QLineEdit(placeholderText="http://127.0.0.1:11434/v1")

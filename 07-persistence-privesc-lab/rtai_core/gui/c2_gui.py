@@ -18,7 +18,7 @@ class C2LabGUI(QWidget):  # type: ignore  # Royal-Sec Tactical
     def _build(self):
         lay=QVBoxLayout(self); lay.setContentsMargins(16,16,16,16); lay.setSpacing(12)
         hdr=QLabel("C2 Detection Lab  —  Beacon simulator (fully offline)")
-        hdr.setFont(QFont("Segoe UI",11,QFont.Weight.Bold)); hdr.setStyleSheet("color: #C2B280; letter-spacing: 0.8px;")
+        hdr.setFont(QFont("Share Tech Mono",11,QFont.Weight.Bold)); hdr.setStyleSheet("color: #C2B280; letter-spacing: 0.8px;")
         lay.addWidget(hdr)
         g1=QGroupBox("Listener"); f1=QFormLayout(g1)
         self.l_host=QLineEdit(placeholderText="127.0.0.1"); self.l_port=QSpinBox(); self.l_port.setRange(1024,65535); self.l_port.setValue(8080)

@@ -18,7 +18,7 @@ class PhishGUI(QWidget):  # type: ignore  # Royal-Sec
     def _build(self):
         lay=QVBoxLayout(self); lay.setContentsMargins(16,16,16,16); lay.setSpacing(12)
         hdr=QLabel("Phishing Simulator  —  Authorized awareness training")
-        hdr.setFont(QFont("Segoe UI",11,QFont.Weight.Bold)); hdr.setStyleSheet("color: #C2B280; letter-spacing: 0.8px;")
+        hdr.setFont(QFont("Share Tech Mono",11,QFont.Weight.Bold)); hdr.setStyleSheet("color: #C2B280; letter-spacing: 0.8px;")
         lay.addWidget(hdr)
         g1=QGroupBox("Campaign"); f1=QFormLayout(g1)
         self.config=QLineEdit(placeholderText="samples/campaign.example.json")

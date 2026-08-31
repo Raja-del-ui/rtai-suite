@@ -13,7 +13,7 @@ except ImportError:
     from PyQt6.QtCore import Qt
 from rtai_core.gui.base import WorkerThread
 
-class StixGUI(QWidget):
+class StixGUI(QWidget):  # Royal-Sec
     def __init__(self):
         super().__init__()
         self.worker=None

@@ -9,7 +9,7 @@ except ImportError:
     from PyQt6.QtGui import QFont
 from rtai_core.gui.base import WorkerThread
 
-class KillchainGUI(QWidget):
+class KillchainGUI(QWidget):  # Royal-Sec
     def __init__(self):
         super().__init__()
         self.worker=None
