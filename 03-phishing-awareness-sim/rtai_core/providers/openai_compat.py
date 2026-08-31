@@ -30,8 +30,16 @@ class OpenAICompatibleProvider(ChatProvider):
 class OllamaProvider(OpenAICompatibleProvider):
     name = "ollama"
 
+class XAIProvider(OpenAICompatibleProvider):
+    name = "xai"
+
+class GrokProvider(OpenAICompatibleProvider):
+    name = "grok"
+
 
 PROTOCOLS = {
     "openai": OpenAICompatibleProvider,
     "ollama": OllamaProvider,
+    "xai": XAIProvider,
+    "grok": GrokProvider,
 }

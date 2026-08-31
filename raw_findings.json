@@ -1,0 +1,353 @@
+{
+  "target": "example.com",
+  "sources": {
+    "dns": {
+      "ok": true,
+      "data": {
+        "A": [
+          "104.20.23.154",
+          "172.66.147.243"
+        ],
+        "AAAA": [
+          "2606:4700:10::6814:179a",
+          "2606:4700:10::ac42:93f3"
+        ],
+        "MX": [
+          "0 "
+        ],
+        "NS": [
+          "elliott.ns.cloudflare.com",
+          "hera.ns.cloudflare.com"
+        ],
+        "TXT": [
+          "_k2n1y4vw3qtb4skdx9e7dxt97qrmmq9",
+          "v=spf1 -all"
+        ],
+        "SOA": [
+          "elliott.ns.cloudflare.com. dns.cloudflare.com. 2411783310 10000 2400 604800 1800"
+        ],
+        "WWW_CNAME": []
+      }
+    },
+    "rdap": {
+      "ok": true,
+      "data": {
+        "status": [
+          "client delete prohibited",
+          "client transfer prohibited",
+          "client update prohibited"
+        ],
+        "registrar": "RESERVED-Internet Assigned Numbers Authority",
+        "registered": "1995-08-14T04:00:00Z",
+        "expires": "2027-08-13T04:00:00Z",
+        "updated": "2026-08-14T08:01:43Z",
+        "nameservers": [
+          "ELLIOTT.NS.CLOUDFLARE.COM",
+          "HERA.NS.CLOUDFLARE.COM"
+        ]
+      }
+    },
+    "tls_certificate": {
+      "ok": true,
+      "data": {
+        "validated_chain": true,
+        "issuer": "SSL Corporation",
+        "subject_cn": "example.com",
+        "not_after": "Oct 27 22:17:21 2026 GMT",
+        "days_remaining": 57,
+        "expired": false,
+        "expiring_soon": false,
+        "sans_count": 2,
+        "sans_sample": [
+          "*.example.com",
+          "example.com"
+        ]
+      }
+    },
+    "certificate_transparency": {
+      "ok": false,
+      "error": "HTTPError: HTTP Error 502: Bad Gateway"
+    },
+    "wayback_history": {
+      "ok": true,
+      "data": {
+        "count": 60,
+        "paths": [
+          {
+            "path": ":80/",
+            "archived": "20020120142510"
+          },
+          {
+            "path": ":80/!",
+            "archived": "20120709042114"
+          },
+          {
+            "path": ":80/!!",
+            "archived": "20140901045957"
+          },
+          {
+            "path": ":80/!!!!!!!!",
+            "archived": "20030924213508"
+          },
+          {
+            "path": "/!$",
+            "archived": "20260217071009"
+          },
+          {
+            "path": "/!$%27()*+./:;=",
+            "archived": "20260211223058"
+          },
+          {
+            "path": ":80/!/product",
+            "archived": "20160807041130"
+          },
+          {
+            "path": "/!@",
+            "archived": "20251026061806"
+          },
+          {
+            "path": ":80/!demoLink",
+            "archived": "20130503031738"
+          },
+          {
+            "path": "/!example.com",
+            "archived": "20150519041207"
+          },
+          {
+            "path": "/!exclamation-point",
+            "archived": "20250728194401"
+          },
+          {
+            "path": "/!exclamation-point&lt;/a&gt;",
+            "archived": "20260102040258"
+          },
+          {
+            "path": ":80/\"/",
+            "archived": "20040204043949"
+          },
+          {
+            "path": "/%22%22",
+            "archived": "20230705085144"
+          },
+          {
+            "path": "/%22$%7Bi%7D",
+            "archived": "20240716235535"
+          },
+          {
+            "path": "/%22%20&%20start%20calc.exe",
+            "archived": "20260112115113"
+          },
+          {
+            "path": "/%22%20&amp;%20start%20calc.exe",
+            "archived": "20260202142159"
+          },
+          {
+            "path": "/%22%20-F%20%22file=@/etc/passwd",
+            "archived": "20250816194457"
+          },
+          {
+            "path": "/%22%20/%3E%3Cbr%3E",
+            "archived": "20250810234423"
+          },
+          {
+            "path": "/%22%20/t%20%22_blank",
+            "archived": "20250410053138"
+          },
+          {
+            "path": "/%22%20\\l%20%22access_token=06ee7434-9499-4766-8502-5d858f3d53c4&token_type=bearer&expires_in=41970",
+            "archived": "20241006135024"
+          },
+          {
+            "path": "/%22%20class=%22popup-main-btn%22%20style=%22background-color:%20",
+            "archived": "20220819134326"
+          },
+          {
+            "path": "/%22%20id=%22navbarDropdownMenuLink%22%20data-toggle=%22dropdown%22%20aria-haspopup=%22true%22%20aria-expanded=%22false%",
+            "archived": "20220714235337"
+          },
+          {
+            "path": "/%22%20id=%22navbarDropdownMenuLink1%22%20data-toggle=%22dropdown%22%20aria-haspopup=%22true%22%20aria-expanded=%22false",
+            "archived": "20220714235341"
+          },
+          {
+            "path": "/%22%20id=%22navbarDropdownMenuLink2%22%20data-toggle=%22dropdown%22%20aria-haspopup=%22true%22%20aria-expanded=%22false",
+            "archived": "20220714235338"
+          },
+          {
+            "path": "/%22%20id=%22navbarDropdownMenuLink3%22%20data-toggle=%22dropdown%22%20aria-haspopup=%22true%22%20aria-expanded=%22false",
+            "archived": "20220714235342"
+          },
+          {
+            "path": "/%22%20id=%22text%22%3E",
+            "archived": "20220727055353"
+          },
+          {
+            "path": "/%22%20onclick=%22alert(1)%22%20x=%22",
+            "archived": "20260811095509"
+          },
+          {
+            "path": "/%22%20style=%22font-weight:bold;%20color:%20green%22",
+            "archived": "20250815135819"
+          },
+          {
+            "path": ":80/%22%20target=_blankFONT%20color=",
+            "archived": "20100129225039"
+          },
+          {
+            "path": "/%22%E2%80%BAExample%E2%80%B9/ulink%E2%80%BA",
+            "archived": "20141226082133"
+          },
+          {
+            "path": "/%22&&sleep(27*1000)*bdbqml&&/%22",
+            "archived": "20260125093126"
+          },
+          {
+            "path": "/%22&&sleep(27*1000)*rkcwwk&&/%22",
+            "archived": "20250112211121"
+          },
+          {
+            "path": "/%22&C2,%22Click",
+            "archived": "20250829033228"
+          },
+          {
+            "path": ":80/\"&gt",
+            "archived": "20040226000513"
+          },
+          {
+            "path": ":80/%22&gt...%22",
+            "archived": "20171111224546"
+          },
+          {
+            "path": "/%22&gt;",
+            "archived": "20251026003003"
+          },
+          {
+            "path": "/%22&gt;&lt;script&gt;alert(/XSSPOSED/);&lt;/script&gt;",
+            "archived": "20201108215634"
+          },
+          {
+            "path": "/%22&gt;discount",
+            "archived": "20210113195100"
+          },
+          {
+            "path": "/%22&gt;Home&lt;/a&gt",
+            "archived": "20240501185505"
+          },
+          {
+            "path": "/%22&gt;http:/example.com/&lt;/a&gt",
+            "archived": "20260514102421"
+          },
+          {
+            "path": "//%22&lt;/a&gt;&lt;span",
+            "archived": "20201111205323"
+          },
+          {
+            "path": "/%22&nbsp;*or*&nbsp;an&nbsp;%22authority%22&nbsp;(i.e.&nbsp;the&nbsp;hostname,%3C/td",
+            "archived": "20240324005513"
+          },
+          {
+            "path": ":80/%22)",
+            "archived": "20030420172337"
+          },
+          {
+            "path": "//%22)%22",
+            "archived": "20120604011220"
+          },
+          {
+            "path": "/%22))",
+            "archived": "20190828225724"
+          },
+          {
+            "path": "/%22).body).to",
+            "archived": "20250118183605"
+          },
+          {
+            "path": ":80/%22).code",
+            "archived": "20140814000704"
+          },
+          {
+            "path": "/%22).GetString().Utf8().data())%60",
+            "archived": "20200430080324"
+          },
+          {
+            "path": ":80/%22);",
+            "archived": "20110721034625"
+          },
+          {
+            "path": "/%22);%0A%7D&amp;version=nightly&amp;edition=2024",
+            "archived": "20250824005352"
+          },
+          {
+            "path": "/%22)%3E",
+            "archived": "20251209034459"
+          },
+          {
+            "path": "/%22*",
+            "archived": "20200819150527"
+          },
+          {
+            "path": "/%22+(method==%22GET%22",
+            "archived": "20230616020359"
+          },
+          {
+            "path": ":80/%22,",
+            "archived": "20030829211520"
+          },
+          {
+            "path": "/%22,%22",
+            "archived": "20230110151748"
+          },
+          {
+            "path": "/%22,%22%CC%80:a%22,null",
+            "archived": "20250701232735"
+          },
+          {
+            "path": "/%22,%22%CC%80:a%22,null,null",
+            "archived": "20250701214004"
+          },
+          {
+            "path": "/%22,%22%CD%BE:a%22,null",
+            "archived": "20250701231013"
+          },
+          {
+            "path": "/%22,%22%CD%BE:a%22,null,null",
+            "archived": "20250706223351"
+          }
+        ]
+      }
+    },
+    "ip_resolution": {
+      "ok": true,
+      "data": [
+        {
+          "ip": "104.20.23.154",
+          "version": 4,
+          "private": false
+        },
+        {
+          "ip": "172.66.147.243",
+          "version": 4,
+          "private": false
+        }
+      ]
+    },
+    "email_security": {
+      "ok": true,
+      "data": {
+        "mx_present": true,
+        "spf": [
+          "v=spf1 -all"
+        ],
+        "dmarc": [
+          "\"v=DMARC1;p=reject;sp=reject;adkim=s;aspf=s\""
+        ],
+        "caa": null,
+        "spf_all_pass": false,
+        "spf_all_strict": true
+      }
+    }
+  },
+  "warnings": [
+    "certificate_transparency failed: HTTP Error 502: Bad Gateway"
+  ]
+}

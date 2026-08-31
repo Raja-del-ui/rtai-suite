@@ -53,7 +53,7 @@ def main():
                         choices=sorted(TEMPLATES) + ["all"],
                         help="'all' runs every template against each recipient")
     parser.add_argument("--out", default="out")
-    parser.add_argument("--provider", choices=["openai", "anthropic", "ollama"])
+    parser.add_argument("--provider", choices=["openai", "anthropic", "xai", "grok", "gemini", "google", "ollama"])
     parser.add_argument("--model")
     parser.add_argument("--base-url")
     parser.add_argument("--send", action="store_true",

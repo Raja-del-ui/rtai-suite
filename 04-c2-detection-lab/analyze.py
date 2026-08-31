@@ -162,7 +162,7 @@ def main():
     parser.add_argument("--stats-only", action="store_true")
     parser.add_argument("--compare", nargs=2, metavar=("LOG_A", "LOG_B"),
                         help="compare two beacon runs statistically (no LLM)")
-    parser.add_argument("--provider", choices=["openai", "anthropic", "ollama"])
+    parser.add_argument("--provider", choices=["openai", "anthropic", "xai", "grok", "gemini", "google", "ollama"])
     parser.add_argument("--model")
     args = parser.parse_args()
 

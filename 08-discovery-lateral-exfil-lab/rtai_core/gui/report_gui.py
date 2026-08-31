@@ -17,7 +17,7 @@ class ReportGUI(QWidget):  # type: ignore
     def _build(self):
         lay=QVBoxLayout(self); lay.setContentsMargins(16,16,16,16); lay.setSpacing(12)
         hdr=QLabel("Report Copilot  —  AI-assisted pentest reports")
-        hdr.setFont(QFont("Segoe UI",11,QFont.Weight.Bold)); hdr.setStyleSheet("color:#0A1931;")
+        hdr.setFont(QFont("Share Tech Mono",11,QFont.Weight.Bold)); hdr.setStyleSheet("color: #C2B280; letter-spacing: 0.8px;")
         lay.addWidget(hdr)
         g1=QGroupBox("Inputs"); f1=QFormLayout(g1)
         self.nmap=QLineEdit(placeholderText="samples/sample-nmap.xml")
@@ -33,14 +33,14 @@ class ReportGUI(QWidget):  # type: ignore
         f2.addRow("Format:", self.fmt); f2.addRow("", self.no_llm); f2.addRow("Output:", self.out)
         lay.addWidget(g2)
         btn=QHBoxLayout()
-        self.run_btn=QPushButton("Generate Report"); self.run_btn.setStyleSheet("QPushButton { background:#0A1931; color:white; padding:10px 22px; border-radius:6px; font-weight:bold; }")
+        self.run_btn=QPushButton("Generate Report"); self.run_btn.setStyleSheet("QPushButton { background:#4B5320; color:white; padding:10px 22px; border-radius:6px; font-weight:bold; }")
         self.run_btn.clicked.connect(self._run)
         self.stop_btn=QPushButton("Stop"); self.stop_btn.setEnabled(False); self.stop_btn.clicked.connect(self._stop)
         self.clear_btn=QPushButton("Clear"); self.clear_btn.clicked.connect(lambda: self.log.clear())
         btn.addWidget(self.run_btn); btn.addWidget(self.stop_btn); btn.addWidget(self.clear_btn); btn.addStretch()
         lay.addLayout(btn)
         self.prog=QProgressBar(); self.prog.setVisible(False); self.prog.setRange(0,0); lay.addWidget(self.prog)
-        self.log=QTextEdit(readOnly=True); self.log.setStyleSheet("QTextEdit { background:#0F172A; color:#E2E8F0; border-radius:6px; padding:8px; font-family: Consolas; }")
+        self.log=QTextEdit(readOnly=True); self.log.setStyleSheet("QTextEdit { background:#050A05; color:#33FF33; border:1px solid #4B5320; color:#E2E8F0; border-radius:6px; padding:8px; font-family: Consolas; }")
         lay.addWidget(self.log,1)
     def _run(self):
         if not any([self.nmap.text().strip(), self.nuclei.text().strip(), self.nessus.text().strip()]):
@@ -55,7 +55,7 @@ class ReportGUI(QWidget):  # type: ignore
         if self.nessus.text().strip(): cmd+=["--nessus", self.nessus.text().strip()]
         if self.no_llm.isChecked(): cmd.append("--no-llm")
         if self.out.text().strip(): cmd+=["--out", self.out.text().strip()]
-        self.log.append(f"[ROYAL-SEC] Generating {self.fmt.currentText()} report ...\n")
+        self.log.append(f"[TACTICAL] Generating {self.fmt.currentText()} report ...\n")
         self.worker=WorkerThread(cmd, cwd=str(Path.cwd()))
         self.worker.output_signal.connect(lambda s: (self.log.append(s), self.log.verticalScrollBar().setValue(self.log.verticalScrollBar().maximum())))
         self.worker.finished_signal.connect(self._done); self.worker.error_signal.connect(lambda e: self.log.append(f"[ERROR] {e}")); self.worker.start()

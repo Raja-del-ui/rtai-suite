@@ -1,6 +1,6 @@
 # AUTHORIZED LAB USE ONLY — BENIGN PLACEHOLDER — NO MALICIOUS CODE
 # RT-WATERMARK: 06-weaponization-forge — T1587/T1583 benign simulation
-# RT-WATERMARK: 06-weaponization-forge — T1587/T1583 benign simulation | target=127.0.0.1 | template=shellcode_stub | actor=Dilnawaz computer | ts=2026-08-30T23:43:25+00:00 | link=fac6a758ca1ef585
+# RT-WATERMARK: 06-weaponization-forge — T1587/T1583 benign simulation | target=127.0.0.1 | template=shellcode_stub | actor=Dilnawaz computer | ts=2026-08-31T08:51:57+00:00 | link=8c80e96f7263b446
 # Template: shellcode_stub — shellcode payload stub (BENIGN PLACEHOLDER with EICAR)
 # Target: 127.0.0.1
 #
@@ -20,7 +20,7 @@ X5O!P%@AP[4\PZX54(P^)7CC)7}$EICAR-STANDARD-ANTIVIRUS-TEST-FILE!$H+H*
 # Metadata:
 #   Stub-Note: BENIGN PLACEHOLDER — NO SHELLCODE — NO NOP SLED — NO ENCODER
 #   Target: 127.0.0.1
-#   Audit: RT-WATERMARK: 06-weaponization-forge — T1587/T1583 benign simulation | target=127.0.0.1 | template=shellcode_stub | actor=Dilnawaz computer | ts=2026-08-30T23:43:25+00:00 | link=fac6a758ca1ef585
-#   Hash-Link: 9a866f14d111e6bf
+#   Audit: RT-WATERMARK: 06-weaponization-forge — T1587/T1583 benign simulation | target=127.0.0.1 | template=shellcode_stub | actor=Dilnawaz computer | ts=2026-08-31T08:51:57+00:00 | link=8c80e96f7263b446
+#   Hash-Link: 375464e68c5e724c
 #   INVOICE PDF PLACEHOLDER — AUDIT WATERMARK — NOT A REAL INVOICE
 # End of benign shellcode stub

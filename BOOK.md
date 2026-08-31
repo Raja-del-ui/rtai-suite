@@ -1,8 +1,8 @@
 # rtai-suite: Military-Grade AI-Integrated Red Team Toolkit
 
-**Version:** 4.0.0 (Military-Grade)  
-**Status:** Production Ready  
-**Tests:** 91 passing | **Lint:** Clean | **Type Check:** Clean
+**Version:** 4.1.0-military (Tactical Operations Console — FIPS/HSM/mTLS/OPA/WORM/SLSA/STIG/TLA+/STIX + Full Kill Chain)  
+**Status:** Production Ready — Military Hardened  
+**Tests:** 91 passing | **Lint:** Clean | **Type Check:** 40 files Clean | **GUI:** OD Green HUD Tactical
 
 ---
 
@@ -23,29 +23,38 @@
 
 ## Overview
 
-**rtai-suite** is a military-grade, AI-integrated red team toolkit designed for authorized security testing, education, and research. It provides five independent, standalone tools that cover the full kill chain from reconnaissance to reporting, all built on a shared `rtai_core` library with military-grade security features.
+**rtai-suite v4.1.0-military** is a **Royal-Sec Tactical Operations Console** — 9 standalone tools covering the **full Lockheed Martin Cyber Kill Chain** (Recon → Weaponization → Delivery → Exploitation → Installation → C2 → Actions) + **MITRE ATT&CK 14 tactics**, unified via `rtai` CLI (`15 tools: recon/fuzz/phish/c2/report + weaponize/persist/apt/killchain/mission/gui`) and a **military-style GUI** (OD Green `#1A261A` Coyote `#C2B280` Black-Green `#0F1A0F`, classification banners `UNCLASS/CUI/SECRET/TOP_SECRET`, tactical map `TacticalMapWidget`, BFT `REAPER 06`, MGRS `38TLL 1234 5678`, ZULU, LEDs `FIPS/mTLS/TPM/WORM/HSM`).
 
-### Key Capabilities
+### Key Capabilities — Full Kill Chain
 
-| Tool | Phase | Description |
-|------|-------|-------------|
-| **Recon Agent** | Reconnaissance | Passive OSINT + LLM analysis |
-| **Injection Fuzzer** | Weaponization/Delivery | Adaptive LLM prompt injection fuzzing |
-| **Phishing Simulator** | Initial Access | Authorized awareness training campaigns |
-| **C2 Detection Lab** | Command & Control | Beacon simulator + AI detection engineering |
-| **Report Copilot** | Reporting | AI-assisted pentest report generation |
+| Tool | Phase | ATT&CK | Description |
+|------|-------|--------|-------------|
+| **Recon Agent** `01` | **Reconnaissance** | `T1590/T1592` | Passive OSINT + LLM attack-surface analysis, deterministic exposure score |
+| **Weaponization Forge** `06` | **Weaponization** | `T1587` | Benign forge: `EICAR` + watermarked `macro/LNK/HTA/ISO/shellcode_stub` placeholders, `FORBIDDEN_SNIPPETS` inverted blocklist, `FORGE_ATTESTED` HMAC |
+| **Injection Fuzzer** `02` | **Weaponization/Exploitation** | `T1190` | Adaptive LLM prompt injection (18 payloads + 2 chains), regex + LLM judge, mutation loop, SARIF/JUnit |
+| **Phishing Simulator** `03` | **Delivery** | `T1566` | Tokenized click tracking, 4 lures, `X-PhishSim` header, `PHISHSIM_ATTESTED` HMAC, `landing.py` lab guard |
+| **C2 Detection Lab** `04` | **C2** `T1071` | Jittered beacon (4 presets: regular/low_slow/bursty/office_hours) + listener `nginx/1.24.0` + AI Sigma/Suricata |
+| **Persistence Lab** `07` | **Installation / PrivEsc / CredAccess** | `T1547/T1053/T1543/T1546` + `T1548/T1134` + `T1003/T1552/T1555` | Simulated registry Run, scheduled task, systemd service, WMI, Startup — `lab_only:true` `safety: no registry write`; safe `whoami /groups` + vault existence |
+| **APT Lab** `08` | **Discovery / Lateral / Collection / Exfil / Impact + Evasion** | `T1082/T1083`/`T1021/T1550`/`T1005/T1074`/`T1041/T1048`/`T1486/T1496`+`T1027` | Read-only discovery (env vars redacted), simulated lateral to `127.0.0.1`+jitter, dummy staging + `7z` placeholder, exfil `POST /exfil` + DNS TXT `*.lab.example` + cloud dead-drop `lab-deaddrop.example`, timestomp/masquerade |
+| **Killchain Orchestrator** `09` | **Orchestrator** | — | Runs `01→06→03→02→04→07→08→05` in order, mission-aware (`rtai mission`), `KILLCHAIN_ATTESTED` `I AM AUTHORIZED` HMAC |
+| **Report Copilot** `05` | **Actions on Objectives** | — | nmap/nuclei/Nessus → dedupe/rank/correlation → LLM narrative + **classification banner** `{{classification_banner}}` + STIX 2.1 `bundle.json` + Navigator `layer.json` |
+| **Mission CLI** `rtai mission` | **Planning** | — | `Mission` `mission_id/name/callsign/grid/CLASSIFICATION/CAVEAT/approver/ROE` + `opsec_status()` `FIPS/mTLS/WORM/TPM` + `mission package` `STIX+SBOM+audit` |
 
-### Military-Grade Features
+### Military-Grade Features — v4.1.0-military Tactical
 
-- **Hash-chained audit log** - Tamper-evident audit trail
-- **Async job orchestration** - POST /v1/recon/async with worker pool
-- **OPA/Rego policies** - Zero-trust authorization
-- **mTLS/SPIFFE** - Service mesh security
-- **TPM 2.0 attestation** - Hardware root of trust
-- **Post-Quantum Crypto** - ML-KEM-768, ML-DSA-65, hybrid X25519+ML-KEM
-- **TLA+ verification** - Formal specs for critical protocols
-- **STIX/TAXII** - Threat intel sharing
-- **SBOM/SBLA** - CycloneDX/SPDX + SLSA provenance
+- **Classification banners** — `UNCLASS #007A33` / `CUI #502B85` / `SECRET #C8102E` / `TOP_SECRET #FF6A00` top+bottom per `rtai_core/mission.py:14-22` `CLASS_BANNERS`/`CLASS_COLORS`, driven by `missions/*.json` or `RTAI_CLASSIFICATION` env, embedded in reports `report.md.j2:1-5` + GUI `style.py:CLASS_BANNER_QSS`
+- **Tactical GUI** — OD Green `#1A261A` Coyote `#C2B280` Black-Green `#0F1A0F` HUD `style.py:MILITARY_QSS`, `TacticalMapWidget` grid+crosshair `QPainter`, BFT `REAPER 06/ TARGET ALPHA/ FOB HAMMER`, MGRS `38TLL 1234 5678`, LEDs `FIPS/mTLS/TPM/WORM/HSM` `LED_QSS`, ZULU `DTG` timer
+- **Hash-chained audit WORM+SIEM** — `rtai_core/audit.py:93-115` `RTAI_AUDIT_WORM=1` `chattr +a` + `RTAI_SIEM_URL` POST + `packaging/logrotate/rtai-audit` + `audit_log:/var/log/royal-sec`
+- **FIPS 140-3** — `rtai_core/military_fips.py` `RTAI_FIPS=1` approved `SHA256/384/512` + `AES-256-GCM`, `audit.py:28-37` check, `server.py:493-499` `--fips`
+- **HSM/Vault** — `rtai_core/military_hsm.py` Vault→TPM NVRAM `0x1500016`→PKCS#11→file→env + `RTAI_HSM_REQUIRED=1` fail-closed, `server.py:500-506` `get_secret()` for `RTAI_API_TOKEN`
+- **mTLS/SPIFFE** — `military_mtls.py:MTLSContextManager` TLS 1.3 `CERT_REQUIRED` + `server.py:395-462` `--tls-cert/--tls-key/--tls-ca/--spiffe-id`
+- **OPA RBAC** — `military_opa.py` 4 Rego bundles + `server.py:268-310` `_opa_allowed()` zero_trust + `cli_app.py:33-90` per-tool `RTAI_HOME` + dispatch audit
+- **TPM 2.0** — `military_tpm.py` PCR/AK/quote via `TemporaryDirectory`, `server.py:508-518` `RTAI_TPM_ATTEST=1` pre-flight
+- **PQC Hybrid** — `military_pqc.py` `X25519+ML-KEM-768` via `HKDF-SHA256`
+- **STIX/TAXII + Navigator** — `military_stix.py:13-80` `kw_only` fix + `copilot --emit-stix/--emit-attack-navigator --classification CUI` + `gui/stix_gui.py` TAXII fetch
+- **TLA+** — `military_tla.py` 3 specs `recon<fuzzer<c2` + `scripts/tla_verify.py`
+- **SLSA L4 + SBOM** — `release.yml:16-40` `cyclonedx-bom` + `scripts/sbom_enforce.py` + `cosign` + `Dockerfile` `cryptography`
+- **STIG** — `scripts/stig_enforce.py` + `military_airgap.py:STIGProfileGenerator` + `ci.yml` + `Makefile` `stig-check/tla-check/sbom/fips-check`
 
 ---
 
@@ -93,61 +102,99 @@ rtai gui
 rtai recon --target example.com
 ```
 
-### Launch GUI
+### Launch GUI — Military Tactical Console (v4.1.0-military)
+
+**Military Style:** OD Green `#1A261A` Coyote `#C2B280` Black-Green `#0F1A0F` HUD per `rtai_core/gui/style.py:MILITARY_QSS`, classification banners top+bottom `UNCLASS #007A33` / `CUI #502B85` / `SECRET #C8102E` / `TOP_SECRET #FF6A00` per `rtai_core/mission.py:14-22`, driven by `missions/*.json` or `RTAI_CLASSIFICATION` env.
 
 ```bash
-# Launch the unified GUI
+# Default (CUI)
 rtai gui
-
+# Secret with FIPS
+# PowerShell: $env:RTAI_CLASSIFICATION="SECRET"; $env:RTAI_FIPS="1"; rtai-gui
+# CMD: set RTAI_CLASSIFICATION=SECRET && set RTAI_FIPS=1 && rtai-gui
+# Linux: RTAI_CLASSIFICATION=SECRET RTAI_FIPS=1 rtai-gui
 # Or directly
-python -m rtai_core.gui
+python -m rtai_core.gui.launcher
+```
+
+**GUI Tabs — Full Kill Chain (11 tabs):**
+- `◆ TACTICAL` — Tactical dashboard `TacticalMapWidget` (`grid+crosshair` `QPainter`), mission selector (`missions/index.json` via `rtai_core/mission.py`), BFT `REAPER 06 / TARGET ALPHA / FOB HAMMER` `MGRS 38TLL 1234 5678`, `DTG ZULU` timer, 6 status cards `OPSEC/ENCRYPTION(FIPS/mTLS/PQC)/AUDIT(WORM/SIEM)/STIX(12)/TLA+ STIG/BFT`, quick actions `MISSION PACKAGE/AAR/OPSEC CHECK`
+- `MISSION` — `rtai_core/gui/mission_gui.py` create `OP-XXXX` with `classification/caveat/approver/grid/ROE targets/techniques/window`, `SAVE MISSION` → `missions/OP-*.json` `600` + `index.json`, `MISSION PACKAGE` `STIX+SBOM+audit` + `HANDLING.txt`, `OPSEC CHECK` `FIPS/mTLS/WORM/TPM`
+- `RECON` — `recon_gui.py` target `example.com` + `Include HTTP` HMAC `RECON_ATTESTED`, provider `ollama/openai/anthropic/xai/grok`, `Start Recon` → `rtai recon --target`
+- `FORGE` — `weaponize_gui.py` `FORGE` 5 benign templates `document_macro/lnk_dropper/hta_artifact/iso_container/shellcode_stub` (`EICAR` + `WATERMARK`), `LIST TEMPLATES`, lab-only `127.0.0.1`
+- `FUZZER` — `fuzzer_gui.py` `Base URL` `http://127.0.0.1:11434/v1` + judge/adaptive
+- `PHISH` — `phish_gui.py` campaign builder with `PHISHSIM_ATTESTED` HMAC, 4 lures
+- `C2 LAB` — `c2_gui.py` listener `127.0.0.1:8080` + beacon `bursty/office_hours` + analyze `regularity_index`
+- `PERSIST` — `persist_gui.py` 5 techniques `registry_run/scheduled_task/service/wmi/startup` (`lab_only:true` `simulated:true` `safety: no registry write`), `PERSIST_LAB_ATTESTED` HMAC
+- `APT LAB` — `apt_gui.py` 6-phase `Discovery→Evasion→Collection→Lateral→Exfil→Impact`, `apt_telemetry.jsonl` + `apt_findings.json` for `05 copilot`
+- `KILLCHAIN` — `killchain_gui.py` `LAUNCH KILLCHAIN` `01→06→03→02→04→07→08→05` + `LIST PHASES`, `KILLCHAIN_ATTESTED` `I AM AUTHORIZED`
+- `REPORT` — `report_gui.py` `classification` `CUI/SECRET` banner `report.md.j2:1-5` + `STIX`/`Navigator`
+- `STIX` — `stix_gui.py` TAXII fetch `TAXIIClient` + `STIXBuilder` indicator + `ATTACKNavigatorLayer` + OPA `data_protection` check
+- **Footer:** `ROYAL-SEC • TACTICAL CONSOLE • FIPS ENFORCE • mTLS ESTABLISHED • WORM ENABLED • TPM ATTESTED • OPA ENFORCED` + live `DTG ZULU` + bottom classification banner
+
+**Verification (offscreen):**
+```bash
+QT_QPA_PLATFORM=offscreen python -c "from PySide6.QtWidgets import QApplication; app=QApplication([]); from rtai_core.gui.launcher import TacticalMapWidget; print('tactical ok')"
+python verify_project.py  # checks launcher.main + _banner + 5 core GUIs + Recon log/prog
 ```
 
 ---
 
-## Architecture
+## Architecture — Full Kill Chain (9 Tools + Tactical Console)
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                        rtai_core (Shared Library)              │
-├─────────────────────────────────────────────────────────────────┤
-│  providers/        │  llm_client.py     │  logging_utils.py    │
-│  config.py         │  registry.py       │  storage.py          │
-│  retry.py          │  validation.py     │  metrics.py          │
-│  exceptions.py     │  audit.py          │  models.py           │
-└─────────────────────────────────────────────────────────────────┘
-                              │
-        ┌─────────────────────┼─────────────────────┐
-        ▼                     ▼                     ▼
-┌───────────────┐    ┌───────────────┐    ┌───────────────┐
-│ 01-Recon      │    │ 02-Fuzzer     │    │ 03-Phishing   │
-│ sources.py    │    │ detectors.py  │    │ auth.py       │
-│ analyst.py    │    │ judge.py      │    │ generator.py  │
-│ scoring.py    │    │ runner.py     │    │ templates.py  │
-│ recon_agent.py│    │ inject_fuzzer │    │ campaign.py   │
-└───────────────┘    └───────────────┘    └───────────────┘
-                              │
-        ┌─────────────────────┼─────────────────────┐
-        ▼                     ▼                     ▼
-┌───────────────┐    ┌───────────────┐    ┌───────────────┐
-│ 04-C2 Lab     │    │ 05-Copilot    │    │ Platform API  │
-│ listener.py   │    │ copilot.py    │    │ (FastAPI)     │
-│ beacon.py     │    │ parsers.py    │    │ (Uvicorn)     │
-│ analyze.py    │    │ enrich.py     │    │               │
-└───────────────┘    └───────────────┘    └───────────────┘
+┌──────────────────────────────────────────────────────────────────────────────┐
+│  rtai_core (Shared Library — FIPS/HSM/mTLS/OPA/TPM/PQC/STIX/TLA/Audit)      │
+│  providers/ │ audit.py(WORM+SIEM) │ validation.py │ mTLS │ OPA │ FIPS │ HSM │
+│  config │ registry │ storage │ retry │ metrics │ mission.py │ cli_app.py    │
+└──────────────────────────────────────────────────────────────────────────────┘
+         │              │              │              │              │
+    ┌────┼────┐    ┌────┼────┐    ┌────┼────┐    ┌────┼────┐    ┌────┼────┐
+    ▼         ▼    ▼         ▼    ▼         ▼    ▼         ▼    ▼         ▼
+┌────────┐ ┌────────┐ ┌────────┐ ┌────────┐ ┌────────┐ ┌────────┐ ┌────────┐ ┌────────┐
+│01 Recon│ │06 Forge│ │02 Fuzz │ │03 Phish│ │04 C2   │ │07Persist│ │08 APT  │ │09 Kill │
+│sources │ │forge.py│ │runner  │ │campaign│ │beacon  │ │persist │ │apt_lab │ │orchestr│
+│analyst │ │EICAR   │ │payloads│ │generator│ │listener│ │privesc │ │discov  │ │mission │
+│scoring │ │FORBID  │ │judge   │ │landing │ │analyze │ │cred    │ │lateral │ │stix    │
+└────────┘ └────────┘ └────────┘ └────────┘ └────────┘ └────────┘ └────────┘ └────────┘
+         └──────────────────────┬──────────────────────┘
+                                ▼
+                    ┌─────────────────────┐
+                    │ 05 Copilot + 09 Orchestrator │
+                    │ copilot.py + STIX/Navigator   │
+                    │ + classification banners       │
+                    └─────────────────────┘
+                                │
+                    ┌───────────┴───────────┐
+                    ▼                       ▼
+            ┌──────────────┐        ┌──────────────┐
+            │ Platform API │        │ Tactical GUI │
+            │ mTLS/FIPS/OPA│        │ OD Green HUD │
+            │ HSM/WORM/SIEM│        │ Tactical Map │
+            └──────────────┘        └──────────────┘
 ```
 
-### Shared Core (`rtai_core`)
+### Shared Core (`rtai_core`) — Military Hardened
 
-| Module | Purpose |
-|--------|---------|
-| `providers/` | LLM provider abstraction (OpenAI, Anthropic, Ollama) |
-| `config.py` | Layered config (defaults → file → env → CLI) |
-| `registry.py` | Plugin registry for collectors/detectors |
-| `storage.py` | JSONL + SQLite event stores |
-| `audit.py` | Hash-chained tamper-evident audit log |
-| `metrics.py` | Prometheus metrics exposition |
-| `providers/` | LLM provider implementations |
+| Module | Purpose | Military |
+|--------|---------|----------|
+| `providers/` | LLM provider abstraction (OpenAI, Anthropic, Ollama) | — |
+| `config.py` | Layered config (defaults → file → env → CLI) | `mission.py` ROE |
+| `registry.py` | Plugin registry for collectors/detectors | — |
+| `storage.py` | JSONL + SQLite event stores | `SqliteEventStore` for beacons/audit |
+| `audit.py` | Hash-chained `audit.log` + `verify()` | **WORM** `chattr +a` `600` + **SIEM** `RTAI_SIEM_URL` POST `93-115` + `host/os_user` + `FIPS` `sha256` |
+| `validation.py` | Lab-only `assert_lab_address` | **TEST-NET deny** `192.0.2.0/24` + MGRS |
+| `mission.py` | — | **Mission** `OP-XXXX` `CUI/SECRET` `CLASS_BANNERS`/`CLASS_COLORS` + `ROE.is_active()` + `opsec_status()` `FIPS/mTLS/WORM/TPM` |
+| `mission_cli.py` | — | `rtai mission --create/--list/--package/--opsec` |
+| `military_fips.py` | — | **FIPS 140-3** `FIPSLevel` `check_hash()` `RTAI_FIPS=1` |
+| `military_hsm.py` | — | **HSM** Vault→TPM NVRAM `0x1500016`→PKCS#11→file→env + `RTAI_HSM_REQUIRED=1` |
+| `military_mtls.py` | — | **mTLS/SPIFFE** `MTLSContextManager` TLS 1.3 `CERT_REQUIRED` |
+| `military_opa.py` | — | **OPA** 4 Rego bundles `zero_trust` |
+| `military_tpm.py` | — | **TPM 2.0** `tpm2_pcrread/quote` via `TemporaryDirectory` |
+| `military_pqc.py` | — | **PQC** `X25519+ML-KEM-768` `HKDF` |
+| `military_stix.py` | — | **STIX 2.1** `STIXBuilder` + `MITREATTACKMapper` + `ATTACKNavigatorLayer` `kw_only` |
+| `metrics.py` | Prometheus metrics | `REGISTRY` |
+| `cli_app.py` | **Unified CLI** `15 tools` `mission/weaponize/persist/apt/killchain` | Per-tool `find_repo_root(tool)` + `rtai_dispatch` audit |
 
 ---
 
@@ -343,6 +390,90 @@ python copilot.py --nmap scan.xml --emit-json findings.json
 - Attack narrative generation
 - 30/60/90 day remediation roadmap
 - SARIF export for CI
+- **Classification-aware reports** `copilot --classification SECRET` → banner `{{classification_banner}}` top/bottom `report.md.j2:1-5` + `report.html.j2:1-5`, STIX `bundle.json`, Navigator `layer.json`
+
+---
+
+### 6. Weaponization Forge (`06-weaponization-forge`) — Benign Payload Forge
+
+**Purpose:** Safe weaponization simulation — generates **benign placeholders only** (`EICAR` `X5O!P%@AP[4\PZX54(P^)7CC)7}$EICAR-STANDARD-ANTIVIRUS-TEST-FILE!$H+H*` + `WATERMARK` `AUTHORIZED LAB USE ONLY — BENIGN PLACEHOLDER`) for `T1587`.
+
+```bash
+rtai weaponize --list-templates
+# TEMPLATE           EXT          DESCRIPTION
+# document_macro     .vba.txt     benign Office macro with MsgBox
+# lnk_dropper        .lnk.txt     plain-text LNK description
+# hta_artifact       .hta.txt     benign HTML placeholder
+# iso_container      (dir)        directory with EICAR.txt + audit watermark
+# shellcode_stub     .bin.txt     EICAR test string only
+
+FORGE_ATTESTED=1 rtai weaponize --target 127.0.0.1 --payload-type shellcode_stub --out out --yes
+# out/shellcode_stub_127.0.0.1.bin.txt + .audit.json sidecar + audit.log verify
+RTAI_ATTEST_KEY=<hmac> rtai weaponize --target lab.local --payload-type document_macro --yes  # HMAC when RTAI_ATTEST_KEY set
+```
+
+**Gates:** `forge.py:94` `FORBIDDEN_SNIPPETS` inverted blocklist (`VirtualAlloc`/`CreateRemoteThread`/… → reject) + `validate_payload_content:292` watermark+EICAR required + `FORGE_ATTESTED` HMAC `RTAI_ATTEST_KEY` `168` + `require_authorization` `ATTACK` `199` + lab-only `assert_lab_address`/`valid_domain` `249` + `audit_record("weaponization_generated")` `380`.
+
+---
+
+### 7. Persistence Lab (`07-persistence-privesc-lab`) — Installation / PrivEsc / CredAccess
+
+**Purpose:** Simulates `T1547/T1053/T1543/T1546` persistence + `T1548/T1134` priv-esc + `T1003/T1552/T1555` credential access — **logs only, never host write**.
+
+```bash
+rtai persist --host 127.0.0.1 --technique all --log persistence.jsonl
+# 5 persistence: T1547.001 Registry Run, T1053.005 Scheduled Task, T1543.003 Service, T1546.003 WMI, T1547.001 Startup
+# 3 privesc: T1134 whoami /groups, T1134.001 process_token, T1548.002 UAC (read-only)
+# 3 cred: T1003 vault existence, T1552 file existence, T1555 browser vault (Path.exists only, never open)
+
+PERSIST_LAB_ATTESTED=1 rtai persist --host 127.0.0.1 --technique registry_run --yes
+python persist_lab.py --host 127.0.0.1 --technique all --dry-run  # preview
+```
+
+**Gates:** `persist_lab.py:56-57` `PERSIST_LAB_ATTESTED` `I AM AUTHORIZED` HMAC, `guard_host()` `assert_lab_address`, `append_jsonl()` `lab_only:true` `simulated:true`, `audit_record("persistence_simulated")` `468`.
+
+---
+
+### 8. APT Lab (`08-discovery-lateral-exfil-lab`) — Discovery / Lateral / Collection / Exfil / Impact
+
+**Purpose:** Adversary-tactics simulation `TA0007/TA0008/TA0009/TA0010/TA0040` + `TA0005` defense evasion — all **lab-only, report-only, audit-chained**.
+
+```bash
+rtai apt --host 127.0.0.1 --port 8080  # lab listener must be running: rtai c2-listen --port 8080
+# Phases (log to apt_telemetry.jsonl + apt_findings.json for 05 copilot):
+# 1/6 Discovery (T1082 env vars redacted, T1057 tasklist/ps, T1083 temp dir, T1018 getaddrinfo, T1069 whoami /groups)
+# 2/6 Defense Evasion (T1027 base64, T1070 timestomp, T1036 masquerading)
+# 3/6 Collection (T1005 dummy 128-512B in temp/apt_lab_stage_* + 7z placeholder)
+# 4/6 Lateral (T1021 PsExec/SMB/WMI to 127.0.0.1 jitter 0.35, log only)
+# 5/6 Exfil (T1041 POST random to 127.0.0.1:8080/exfil + T1048 DNS TXT *.lab.example + cloud lab-deaddrop.example)
+# 6/6 Impact (T1486 ransom_note_sim, T1496 85% CPU — report-only)
+
+APT_LAB_ATTESTED=1 rtai apt --host 127.0.0.1 --port 8080 --yes
+python apt_lab.py --host 127.0.0.1 --dry-run --yes  # dry-run
+python apt_lab.py --host 127.0.0.1 --port 8080 --findings apt_findings.json --verbose
+# Ingest findings into copilot: rtai report --nmap scan.xml --company ACME --no-llm (or use apt_findings.json via custom parser)
+```
+
+**Integration:** `apt_telemetry.jsonl` append fields compatible with `04/analyze.py:24-34` `load_polls` + `apt_findings.json` shape compatible with `05/parsers.py:30-50` + `copilot.py:151-170` `emit_json`.
+
+---
+
+### 9. Kill Chain Orchestrator (`09-killchain-orchestrator`) + Mission CLI
+
+**Purpose:** Runs **full 7-phase kill chain** in order: `01 Recon → 06 Weaponize → 03 Phish → 02 Fuzz → 04 C2 → 07 Persist → 08 APT → 05 Report` — mission-aware, dry-run via `--help` for safe demos.
+
+```bash
+rtai mission --create --name "MANTICORE SHIELD" --classification SECRET --caveat NOFORN --callsign "REAPER 06" --grid "38TLL 1234 5678" --approver "COL Smith" --rank "O-6" --targets "127.0.0.1,example.com"
+rtai mission --list
+rtai mission --opsec  # checks FIPS/mTLS/WORM/TPM
+
+KILLCHAIN_ATTESTED=1 rtai killchain --target 127.0.0.1 --mission missions/OP-XXXX.json --dry-run --yes
+KILLCHAIN_ATTESTED=1 rtai killchain --target 127.0.0.1 --yes  # full run, lab-only
+
+# GUI: rtai gui → ◆ TACTICAL tab (tactical map + BFT + LEDs) + MISSION tab (save/package/OPSEC) + STIX tab
+```
+
+**Tactical GUI** `rtai_core/gui/launcher.py:19-80` **Military HUD**: OD Green `#1A261A` Coyote `#C2B280` Black-Green `#0F1A0F`, classification banners `UNCLASS/CUI/SECRET/TOP_SECRET` top+bottom per `mission.py:14-22`, `TacticalMapWidget` grid+crosshair `QPainter`, BFT `REAPER 06/TARGET ALPHA/FOB HAMMER` `MGRS 38TLL 1234 5678` `DTG ZULU`, LEDs `FIPS/mTLS/TPM/WORM/HSM` `LED_QSS`, ZULU timer, 7+ tabs `◆ TACTICAL/MISSION/RECON/FUZZER/PHISH/C2 LAB/REPORT/STIX` (`mission_gui.py`, `stix_gui.py`).
 
 ---
 
@@ -368,15 +499,20 @@ cd 01-ai-recon-agent && python recon_agent.py --help
 cd ../02-llm-injection-fuzzer && python inject_fuzzer.py --help
 ```
 
-### Requirements
+### Requirements — Full Kill Chain (9 tools)
 
-| Project | Runtime Deps | Optional |
-|---------|--------------|----------|
-| 01-recon | `dnspython>=2.6` | - |
-| 02-fuzzer | stdlib only | `llama3.1` (Ollama) |
-| 03-phishing | stdlib only | `jinja2` (optional) |
-| 04-c2lab | stdlib only | - |
-| 05-copilot | `jinja2>=3.1` | `python-pptx` |
+| Project | Runtime Deps | Optional | Lab Guard |
+|---------|--------------|----------|-----------|
+| 01-recon | `dnspython>=2.6` | `llama3.1` (Ollama) | `valid_domain` + `--include-http` HMAC |
+| 02-fuzzer | stdlib only | `llama3.1` | `INJECTION_FUZZER_ATTESTED` HMAC |
+| 03-phishing | stdlib only | `jinja2` | `PHISHSIM_ATTESTED` HMAC + `assert_lab_address` landing |
+| 04-c2lab | stdlib only | — | `assert_lab_address` loopback only |
+| 05-copilot | `jinja2>=3.1` | `python-pptx` | `classification` banner `CUI/SECRET` |
+| 06-weaponization-forge | stdlib only | — | `FORGE_ATTESTED` HMAC + `EICAR` watermark + `FORBIDDEN_SNIPPETS` |
+| 07-persistence-privesc-lab | stdlib only | — | `PERSIST_LAB_ATTESTED` + `lab_only:true` `safety: no registry write` |
+| 08-discovery-lateral-exfil-lab | stdlib only | — | `APT_LAB_ATTESTED` + `assert_lab_address` `127.0.0.1` only |
+| 09-killchain-orchestrator | stdlib only | — | `KILLCHAIN_ATTESTED` `I AM AUTHORIZED` + `mission.is_active` ROE window |
+| Platform `rtai_core` | stdlib core | `cryptography` (mTLS/PQC), `PySide6` (GUI) | `RTAI_FIPS=1` + `RTAI_HSM_REQUIRED=1` + `RTAI_AUDIT_WORM=1` |
 
 ---
 
@@ -425,12 +561,16 @@ curl http://127.0.0.1:9000/metrics
 | GET | `/v1/jobs/{id}` | Yes | Job status/result |
 | POST | `/v1/payloads/validate` | Yes | Validate injection payloads |
 
-### Security
+### Security — Military Hardened (FIPS/HSM/mTLS/OPA/WORM)
 
-- **Bearer auth** when `RTAI_API_TOKEN` set
-- **Rate limiting** - 60 req/min per IP (sliding window)
-- **Security headers** - nosniff, DENY, no-store, no-referrer
-- **Active recon** requires `X-RTAI-Authorized: yes` header
+- **Bearer auth** `hmac.compare_digest` + **HSM** `military_hsm.py` Vault→TPM NVRAM `0x1500016`→PKCS#11→file→env + `RTAI_HSM_REQUIRED=1` fail-closed (`server.py:500-506`)
+- **Rate limiting** 60 req/min per IP `SlidingWindowLimiter` + `_client_ip()` `X-Forwarded-For` trusted proxy `127.0.0.1` only (G12)
+- **Security headers** `nosniff/DENY/no-store/no-referrer` + `MAX_BODY 512KB` 413
+- **FIPS 140-3** `RTAI_FIPS=1` `military_fips.py` approved `SHA256/384/512` + `AES-256-GCM` + `audit.py:28-37` check
+- **mTLS/SPIFFE** `RTAI_TLS_CERT/KEY/CA` `MTLSContextManager` TLS 1.3 `CERT_REQUIRED` + `RTAI_SPIFFE_ID` `server.py:395-462` + `RTAI_MTLS=1`
+- **OPA RBAC** `RTAI_OPA_POLICY` `military_opa.py` 4 Rego bundles `zero_trust` + `_opa_allowed()` `403` + `RTAI_SCOPES`
+- **TPM attestation** `RTAI_TPM_ATTEST=1` `military_tpm.py` `tpm2_pcrread/quote` + `TemporaryDirectory`
+- **Active recon** `X-RTAI-Authorized: yes` (dev) or `HMAC(RTAI_ATTEST_KEY,"active-recon")[:16]` when `RTAI_ATTEST_KEY` set (`server.py:326-339`)
 
 ### Output Formats
 
@@ -654,16 +794,30 @@ python -m pstats profile.stats
 
 ## Appendix: Command Reference
 
-### Unified CLI (`rtai`)
+### Unified CLI (`rtai`) — 15 Tools (Full Kill Chain)
 
 ```bash
-rtai --list                    # List all tools
+rtai --list                    # 15 tools: recon/fuzz/phish/c2/report + weaponize/persist/apt/killchain/mission/gui
 rtai recon --target example.com
-rtai fuzz --url http://127.0.0.1:11434/v1 --model llama3.1
+rtai fuzz --url http://127.0.0.1:11434/v1 --model llama3.1 --list-payloads
 rtai phish --config campaign.json --template password_expiry
-rtai c2-listen --port 8080
-rtai c2-beacon --count 12
-rtai report --nmap scan.xml --company Acme --no-llm
+rtai c2-listen --host 127.0.0.1 --port 8080
+rtai c2-beacon --host 127.0.0.1 --count 12
+rtai report --nmap scan.xml --company Acme --no-llm --classification CUI --emit-stix bundle.json
+rtai weaponize --list-templates
+rtai weaponize --target 127.0.0.1 --payload-type shellcode_stub --yes  # FORGE_ATTESTED=1
+rtai persist --host 127.0.0.1 --technique all  # PERSIST_LAB_ATTESTED=1
+rtai apt --host 127.0.0.1 --port 8080 --yes  # APT_LAB_ATTESTED=1
+rtai killchain --target 127.0.0.1 --mission missions/OP-XXXX.json --dry-run --yes  # KILLCHAIN_ATTESTED=1
+rtai mission --create --name "MANTICORE SHIELD" --classification SECRET --targets 127.0.0.1 --approver "COL Smith"
+rtai mission --list; rtai mission --opsec
+rtai gui  # Tactical Operations Console v4.1.0-military
+```
+
+**Windows env (PowerShell/CMD):**
+```powershell
+$env:RTAI_CLASSIFICATION="SECRET"; $env:RTAI_FIPS="1"; rtai-gui
+# CMD: set RTAI_CLASSIFICATION=SECRET && set RTAI_FIPS=1 && rtai-gui
 ```
 
 ### Environment Variables
@@ -698,18 +852,20 @@ rtai report --nmap scan.xml --company Acme --no-llm
 
 ---
 
-## Appendix: Project Inventory
+## Appendix: Project Inventory — Full Kill Chain (9 Tools + Tactical GUI)
 
-## Appendix: Project Inventory
-
-| Project | Path | Description |
-|---------|------|-------------|
-| 01-ai-recon-agent | `01-ai-recon-agent/` | Passive OSINT + LLM analysis |
-| 02-llm-injection-fuzzer | `02-llm-injection-fuzzer/` | Adaptive prompt injection fuzzer |
-| 03-phishing-awareness-sim | `03-phishing-awareness-sim/` | Authorized phishing simulator |
-| 04-c2-detection-lab | `04-c2-detection-lab/` | C2 beacon sim + AI detection |
-| 05-pentest-report-copilot | `05-pentest-report-copilot/` | AI-assisted report generator |
-| **06-gui** | `rtai_core/gui/` | **Unified GUI launcher with tabbed interface** |
+| Project | Path | Kill Chain | Description |
+|---------|------|------------|-------------|
+| 01-ai-recon-agent | `01-ai-recon-agent/` | **Reconnaissance** | Passive OSINT + LLM analysis, exposure score |
+| 02-llm-injection-fuzzer | `02-llm-injection-fuzzer/` | **Exploitation** | Adaptive LLM prompt injection fuzzer, 18 payloads + 2 chains |
+| 03-phishing-awareness-sim | `03-phishing-awareness-sim/` | **Delivery** | Authorized phishing simulator, 4 lures, click tracking |
+| 04-c2-detection-lab | `04-c2-detection-lab/` | **C2** | Beacon simulator (4 presets) + listener + AI Sigma/Suricata |
+| 05-pentest-report-copilot | `05-pentest-report-copilot/` | **Actions** | nmap/nuclei/Nessus → STIX + Navigator + classification report |
+| 06-weaponization-forge | `06-weaponization-forge/` | **Weaponization** | Benign `EICAR` forge: macro/LNK/HTA/ISO/shellcode_stub, lab-only, HMAC |
+| 07-persistence-privesc-lab | `07-persistence-privesc-lab/` | **Installation/PrivEsc/CredAccess** | Simulated registry/scheduled task/service/WMI + whoami + vault existence |
+| 08-discovery-lateral-exfil-lab | `08-discovery-lateral-exfil-lab/` | **Discovery/Lateral/Collection/Exfil/Impact** | Read-only discovery, simulated lateral to 127.0.0.1, exfil POST+DNS+cloud |
+| 09-killchain-orchestrator | `09-killchain-orchestrator/` | **Orchestrator** | Runs `01→06→03→02→04→07→08→05` mission-aware, `KILLCHAIN_ATTESTED` |
+| **Tactical GUI** | `rtai_core/gui/` | **Console** | 11-tab `TacticalMapWidget` + Mission/STIX + OD Green HUD `launcher.py:19-80`, `style.py:MILITARY_QSS` |
 
 ### Shared Library
 
@@ -735,6 +891,6 @@ rtai report --nmap scan.xml --company Acme --no-llm
 
 ---
 
-*Royal-Sec rtai-suite v4.0.0 — Military-Grade AI-Integrated Red Team Toolkit*  
-*Built for authorized testing, research, and Royal-Sec commercial operations*  
-*© 2026 Royal-Sec Ltd — MIT License + Royal-Sec EULA (`EULA.md`) — Royal-Sec Trademark Reserved (`TRADEMARK.md`)*
+*Royal-Sec rtai-suite v4.1.0-military — Tactical Operations Console — FIPS/HSM/mTLS/OPA/WORM/SLSA/STIG/TLA+/STIX + Full Kill Chain*  
+*Built for authorized testing, research, and Royal-Sec tactical operations (lab-only, audit-chained)*  
+*© 2026 Royal-Sec Ltd — MIT License + Royal-Sec EULA (`EULA.md`) — Royal-Sec Trademark Reserved (`TRADEMARK.md`) — GUI: `rtai_core/gui/launcher.py:19-80` TacticalMapWidget + Mission/STIX*

@@ -17,7 +17,7 @@ class FuzzerGUI(QWidget):  # type: ignore
     def _build(self):
         lay=QVBoxLayout(self); lay.setContentsMargins(16,16,16,16); lay.setSpacing(12)
         hdr=QLabel("Injection Fuzzer  —  Adaptive prompt-injection with judge & mutation")
-        hdr.setFont(QFont("Segoe UI",11,QFont.Weight.Bold)); hdr.setStyleSheet("color:#0A1931;")
+        hdr.setFont(QFont("Segoe UI",11,QFont.Weight.Bold)); hdr.setStyleSheet("color: #C2B280; letter-spacing: 0.8px;")
         lay.addWidget(hdr)
         g1=QGroupBox("Target"); f1=QFormLayout(g1)
         self.url=QLineEdit(placeholderText="http://127.0.0.1:11434/v1")
@@ -26,34 +26,36 @@ class FuzzerGUI(QWidget):  # type: ignore
         f1.addRow("Base URL:", self.url); f1.addRow("Model:", self.model); f1.addRow("Defense prompt:", self.system)
         lay.addWidget(g1)
         g2=QGroupBox("Options"); f2=QFormLayout(g2)
-        self.judge=QCheckBox("Enable LLM-as-judge"); self.adaptive=QSpinBox(); self.adaptive.setRange(0,5)
+        self.judge=QCheckBox("Enable LLM-as-judge"); self.judge_provider=QComboBox(); self.judge_provider.addItems(["ollama","openai","anthropic","xai","grok","gemini","google"]); self.judge_provider.setEnabled(False); self.judge.toggled.connect(lambda v: self.judge_provider.setEnabled(v)); self.adaptive=QSpinBox(); self.adaptive.setRange(0,5)
         self.concurrency=QSpinBox(); self.concurrency.setRange(1,16); self.concurrency.setValue(6)
-        f2.addRow("", self.judge); f2.addRow("Adaptive rounds:", self.adaptive); f2.addRow("Concurrency:", self.concurrency)
+        f2.addRow("", self.judge); f2.addRow("Judge provider:", self.judge_provider); f2.addRow("Adaptive rounds:", self.adaptive); f2.addRow("Concurrency:", self.concurrency)
         lay.addWidget(g2)
         g3=QGroupBox("Output"); f3=QFormLayout(g3)
         self.out=QLineEdit(placeholderText="injection_report.md")
         f3.addRow("Report:", self.out)
         lay.addWidget(g3)
         btn=QHBoxLayout()
-        self.run_btn=QPushButton("Start Fuzzing"); self.run_btn.setStyleSheet("QPushButton { background:#0A1931; color:white; padding:10px 22px; border-radius:6px; font-weight:bold; }")
+        self.run_btn=QPushButton("Start Fuzzing"); self.run_btn.setStyleSheet("QPushButton { background:#4B5320; color:white; padding:10px 22px; border-radius:6px; font-weight:bold; }")
         self.run_btn.clicked.connect(self._run)
         self.stop_btn=QPushButton("Stop"); self.stop_btn.setEnabled(False); self.stop_btn.clicked.connect(self._stop)
         self.clear_btn=QPushButton("Clear"); self.clear_btn.clicked.connect(lambda: self.log.clear())
         btn.addWidget(self.run_btn); btn.addWidget(self.stop_btn); btn.addWidget(self.clear_btn); btn.addStretch()
         lay.addLayout(btn)
         self.prog=QProgressBar(); self.prog.setVisible(False); self.prog.setRange(0,0); lay.addWidget(self.prog)
-        self.log=QTextEdit(readOnly=True); self.log.setStyleSheet("QTextEdit { background:#0F172A; color:#E2E8F0; border-radius:6px; padding:8px; font-family: Consolas; }")
+        self.log=QTextEdit(readOnly=True); self.log.setStyleSheet("QTextEdit { background:#050A05; color:#33FF33; border:1px solid #4B5320; color:#E2E8F0; border-radius:6px; padding:8px; font-family: Consolas; }")
         lay.addWidget(self.log,1)
     def _run(self):
         if not self.url.text().strip(): QMessageBox.warning(self,"Royal-Sec","Base URL required"); return
         self.run_btn.setEnabled(False); self.stop_btn.setEnabled(True); self.prog.setVisible(True)
         cmd=[sys.executable,"-m","rtai_core.cli_app","fuzz","--url",self.url.text().strip(),"--model",self.model.text().strip() or "llama3.1"]
         if self.system.text().strip(): cmd+=["--system", self.system.text().strip()]
-        if self.judge.isChecked(): cmd.append("--judge")
+        if self.judge.isChecked():
+            cmd.append("--judge")
+            if self.judge_provider.currentText(): cmd+=["--judge-provider", self.judge_provider.currentText()]
         if self.adaptive.value()>0: cmd+=["--adaptive", str(self.adaptive.value())]
         cmd+=["--concurrency", str(self.concurrency.value())]
         if self.out.text().strip(): cmd+=["--out", self.out.text().strip()]
-        self.log.append(f"[ROYAL-SEC] Fuzzing {self.url.text().strip()} ...\n")
+        self.log.append(f"[TACTICAL] Fuzzing {self.url.text().strip()} ...\n")
         self.worker=WorkerThread(cmd, cwd=str(Path.cwd()))
         self.worker.output_signal.connect(lambda s: (self.log.append(s), self.log.verticalScrollBar().setValue(self.log.verticalScrollBar().maximum())))
         self.worker.finished_signal.connect(self._done); self.worker.error_signal.connect(lambda e: self.log.append(f"[ERROR] {e}")); self.worker.start()

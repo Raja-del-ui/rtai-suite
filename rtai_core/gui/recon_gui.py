@@ -21,7 +21,7 @@ class ReconGUI(QWidget):  # type: ignore
         lay.setSpacing(12)
         hdr = QLabel("Recon Agent  —  Passive OSINT + LLM attack-surface analysis")
         hdr.setFont(QFont("Segoe UI", 11, QFont.Weight.Bold))
-        hdr.setStyleSheet("color: #0A1931;")
+        hdr.setStyleSheet("color: #C2B280; letter-spacing: 0.8px;")
         lay.addWidget(hdr)
 
         g1 = QGroupBox("Target")
@@ -35,7 +35,7 @@ class ReconGUI(QWidget):  # type: ignore
         g2 = QGroupBox("LLM Settings")
         f2 = QFormLayout(g2)
         self.provider = QComboBox()
-        self.provider.addItems(["ollama","openai","anthropic"])
+        self.provider.addItems(["ollama","openai","anthropic","xai","grok","gemini","google"])
         self.model = QLineEdit(placeholderText="llama3.1 / gpt-4o-mini (leave empty for default)")
         self.api_key = QLineEdit(placeholderText="API key (uses env var if empty)")
         self.api_key.setEchoMode(QLineEdit.EchoMode.Password)
@@ -54,7 +54,7 @@ class ReconGUI(QWidget):  # type: ignore
 
         btn = QHBoxLayout()
         self.run_btn = QPushButton("Start Recon")
-        self.run_btn.setStyleSheet("QPushButton { background:#0A1931; color:white; padding:10px 22px; border-radius:6px; font-weight:bold; } QPushButton:hover { background:#132A4C; }")
+        self.run_btn.setStyleSheet("QPushButton { background:#4B5320; color:white; padding:10px 22px; border-radius:6px; font-weight:bold; } QPushButton:hover { background:#132A4C; }")
         self.run_btn.clicked.connect(self._run)
         self.stop_btn = QPushButton("Stop")
         self.stop_btn.setEnabled(False)
@@ -67,7 +67,7 @@ class ReconGUI(QWidget):  # type: ignore
         self.prog = QProgressBar(); self.prog.setVisible(False); self.prog.setRange(0,0)
         lay.addWidget(self.prog)
         self.log = QTextEdit(readOnly=True)
-        self.log.setStyleSheet("QTextEdit { background:#0F172A; color:#E2E8F0; border:1px solid #1E293B; border-radius:6px; padding:8px; font-family: Consolas; }")
+        self.log.setStyleSheet("QTextEdit { background:#050A05; color:#33FF33; border:1px solid #4B5320; color:#E2E8F0; border:1px solid #1E293B; border-radius:6px; padding:8px; font-family: Consolas; }")
         lay.addWidget(self.log, 1)
 
     def _valid(self, d):
@@ -77,7 +77,7 @@ class ReconGUI(QWidget):  # type: ignore
         t = self.target.text().strip()
         if not t: QMessageBox.warning(self, "Royal-Sec", "Target domain is required"); return
         if not self._valid(t): QMessageBox.warning(self, "Royal-Sec", "Invalid domain format"); return
-        self.run_btn.setEnabled(False); self.stop_btn.setEnabled(True); self.prog.setVisible(True); self.log.append(f"\n[ROYAL-SEC] Starting recon for {t} ...\n")
+        self.run_btn.setEnabled(False); self.stop_btn.setEnabled(True); self.prog.setVisible(True); self.log.append(f"\n[TACTICAL] Starting recon for {t} ...\n")
         cmd = [sys.executable, "-m", "rtai_core.cli_app", "recon", "--target", t]
         if self.http.isChecked(): cmd.append("--include-http")
         if self.provider.currentText(): cmd += ["--provider", self.provider.currentText()]

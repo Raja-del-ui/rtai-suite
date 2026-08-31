@@ -871,6 +871,11 @@ def build_parser() -> argparse.ArgumentParser:
         help="skip credential-access existence checks (T1003, T1552, T1555)",
     )
     parser.add_argument(
+        "--yes",
+        action="store_true",
+        help="skip interactive ATTACK prompt (requires PERSIST_LAB_ATTESTED HMAC when RTAI_ATTEST_KEY set)",
+    )
+    parser.add_argument(
         "--verbose",
         action="store_true",
         help="verbose logging",

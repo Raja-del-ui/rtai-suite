@@ -137,7 +137,7 @@ def main():
     parser.add_argument("--json-out", dest="json_out", default="recon_findings.json",
                         help="machine-readable report (score + diff + evidence)")
     parser.add_argument("--baseline", help="previous raw_findings.json to diff against")
-    parser.add_argument("--provider", choices=["openai", "anthropic", "ollama"])
+    parser.add_argument("--provider", choices=["openai", "anthropic", "xai", "grok", "gemini", "google", "ollama"])
     parser.add_argument("--model")
     parser.add_argument("--base-url")
     args = parser.parse_args()

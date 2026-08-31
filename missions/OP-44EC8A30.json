@@ -1,0 +1,29 @@
+{
+  "mission_id": "OP-44EC8A30",
+  "name": "EVIDENCE-TEST",
+  "callsign": "",
+  "grid_ref": "",
+  "classification": "CUI",
+  "caveat": "",
+  "caveats": [],
+  "approver": "COL Test",
+  "approver_rank": "",
+  "roe": {
+    "targets": [
+      "127.0.0.1"
+    ],
+    "techniques": [
+      "recon",
+      "fuzz",
+      "phish",
+      "c2",
+      "report"
+    ],
+    "start": "2026-08-31T08:52:01.220865+00:00",
+    "end": "2026-09-07T08:52:01.220877+00:00",
+    "window_tz": "UTC"
+  },
+  "opsec_checklist": {},
+  "created": "2026-08-31T08:52:01.220913+00:00",
+  "mde": ""
+}

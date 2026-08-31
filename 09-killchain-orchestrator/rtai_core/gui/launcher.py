@@ -331,6 +331,10 @@ def main(*_args, **_kwargs):
     from rtai_core.gui.phish_gui import PhishGUI
     from rtai_core.gui.c2_gui import C2LabGUI
     from rtai_core.gui.report_gui import ReportGUI
+    from rtai_core.gui.weaponize_gui import WeaponizeGUI
+    from rtai_core.gui.persist_gui import PersistGUI
+    from rtai_core.gui.apt_gui import AptGUI
+    from rtai_core.gui.killchain_gui import KillchainGUI
     # Try mission tab
     try:
         from rtai_core.gui.mission_gui import MissionGUI
@@ -342,11 +346,15 @@ def main(*_args, **_kwargs):
     tabs.addTab(_tactical_dashboard_tab(), "◆ TACTICAL")
     tabs.addTab(mission_tab, "MISSION")
     tabs.addTab(ReconGUI(), "RECON")
+    tabs.addTab(WeaponizeGUI(), "FORGE")
     tabs.addTab(FuzzerGUI(), "FUZZER")
     tabs.addTab(PhishGUI(), "PHISH")
     tabs.addTab(C2LabGUI(), "C2 LAB")
+    tabs.addTab(PersistGUI(), "PERSIST")
+    tabs.addTab(AptGUI(), "APT LAB")
+    tabs.addTab(KillchainGUI(), "KILLCHAIN")
     tabs.addTab(ReportGUI(), "REPORT")
-    # STIX/TAXII tab placeholder
+    # STIX/TAXII tab
     try:
         from rtai_core.gui.stix_gui import StixGUI
         tabs.addTab(StixGUI(), "STIX")
