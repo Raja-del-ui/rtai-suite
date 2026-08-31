@@ -46,22 +46,53 @@ def _classification_banner(classification="CUI", caveat=""):
     return w
 
 def _banner():
-    """Military header banner — OD Green / Coyote tactical."""
+    """Military header banner — OD Green / Coyote tactical with Royal Security logo."""
     w = QFrame()
-    w.setStyleSheet("QFrame { background: #1A261A; border: none; border-bottom: 2px solid #4B5320; } QLabel { color: #D0D8C0; background: transparent; }")
-    w.setFixedHeight(68)
+    w.setStyleSheet("QFrame { background: #0A0A0A; border: none; border-bottom: 2px solid #C2B280; } QLabel { color: #D0D8C0; background: transparent; }")
+    w.setFixedHeight(72)
     lay = QHBoxLayout(w)
-    lay.setContentsMargins(14, 6, 14, 6)
-    # Left: insignia + title
+    lay.setContentsMargins(12, 6, 12, 6)
+    # Left: logo + title block
+    try:
+        from PySide6.QtGui import QPixmap
+    except ImportError:
+        from PyQt6.QtGui import QPixmap
+    logo_path = Path(__file__).parent / "assets" / "logo_small.png"
+    if not logo_path.exists():
+        logo_path = Path(__file__).parent / "assets" / "logo.png"
+    logo_lab = QLabel()
+    logo_lab.setFixedSize(56, 56)
+    logo_lab.setStyleSheet("background: transparent; border: none;")
+    if logo_path.exists():
+        try:
+            pix = QPixmap(str(logo_path))
+            if not pix.isNull():
+                pix = pix.scaled(56, 56, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation)
+                logo_lab.setPixmap(pix)
+                logo_lab.setAlignment(Qt.AlignmentFlag.AlignCenter)
+            else:
+                logo_lab.setText("◆")
+                logo_lab.setStyleSheet("color: #C2B280; font-size: 28px; background: transparent;")
+        except Exception:
+            logo_lab.setText("◆")
+    else:
+        logo_lab.setText("◆")
+        logo_lab.setStyleSheet("color: #C2B280; font-size: 28px; background: transparent;")
+    lay.addWidget(logo_lab)
+    lay.addSpacing(8)
+    # Title block
     left = QVBoxLayout()
-    # Tactical callsign-style title with stencil effect
-    title = QLabel("◆ RTAI  //  TACTICAL OPERATIONS CONSOLE")
-    title.setFont(QFont("Share Tech Mono", 14, QFont.Weight.Bold))
-    title.setStyleSheet("color: #C2B280; letter-spacing: 1.5px; background: transparent;")
-    sub = QLabel("ROYAL-SEC  •  MISSION READY  •  AUTHORIZED USE ONLY  •  AUDIT-LOGGED")
-    sub.setStyleSheet("color: #8A9A6A; font-size: 9px; letter-spacing: 0.8px; background: transparent;")
+    left.setSpacing(1)
+    title = QLabel("ROYAL SECURITY  //  TACTICAL OPERATIONS CONSOLE")
+    title.setFont(QFont("Times New Roman", 13, QFont.Weight.Bold))
+    title.setStyleSheet("color: #D4AF37; letter-spacing: 2px; background: transparent; font-family: 'Times New Roman', serif;")
+    sub = QLabel("CYBER PROTECTION  •  MISSION READY  •  AUTHORIZED USE ONLY  •  AUDIT-LOGGED")
+    sub.setStyleSheet("color: #C2B280; font-size: 8px; letter-spacing: 1.2px; background: transparent; font-family: 'Share Tech Mono', monospace;")
+    crown = QLabel("♛  ROYAL-SEC  •  EST. 2026  •  BY APPOINTMENT")
+    crown.setStyleSheet("color: #8A9A6A; font-size: 7px; letter-spacing: 0.8px; background: transparent;")
     left.addWidget(title)
     left.addWidget(sub)
+    left.addWidget(crown)
     lay.addLayout(left)
     lay.addStretch()
     # Center: encryption LEDs
@@ -184,6 +215,29 @@ class TacticalMapWidget(QFrame):
             painter.drawLine(x, 0, x, self.height())
         for y in range(0, self.height(), step):
             painter.drawLine(0, y, self.width(), y)
+        # Royal Security watermark logo faint center
+        try:
+            from PySide6.QtGui import QPixmap
+        except ImportError:
+            try:
+                from PyQt6.QtGui import QPixmap
+            except ImportError:
+                QPixmap = None
+        if QPixmap:
+            logo_path = Path(__file__).parent / "assets" / "logo_small.png"
+            if logo_path.exists():
+                try:
+                    pix = QPixmap(str(logo_path))
+                    if not pix.isNull():
+                        # Draw faint 90x90 centered with low opacity
+                        painter.setOpacity(0.07)
+                        w, h = 90, 90
+                        cx, cy = self.width()//2, self.height()//2
+                        scaled = pix.scaled(w, h, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation)
+                        painter.drawPixmap(cx - scaled.width()//2, cy - scaled.height()//2 - 10, scaled)
+                        painter.setOpacity(1.0)
+                except Exception:
+                    pass
         # Crosshair center
         cx, cy = self.width()//2, self.height()//2
         painter.setPen(QPen(QColor("#2A5A2A"), 1, Qt.PenStyle.SolidLine))
@@ -191,6 +245,11 @@ class TacticalMapWidget(QFrame):
         painter.drawLine(cx, cy-20, cx, cy+20)
         painter.setPen(QPen(QColor("#4B5320"), 1, Qt.PenStyle.SolidLine))
         painter.drawRect(cx-40, cy-40, 80, 80)
+        # Gold laurel accent corners
+        painter.setPen(QPen(QColor("#D4AF37"), 1, Qt.PenStyle.SolidLine))
+        for (x, y) in [(8,8), (self.width()-28,8), (8,self.height()-28), (self.width()-28,self.height()-28)]:
+            painter.drawLine(x, y, x+20, y)
+            painter.drawLine(x, y, x, y+20)
         painter.end()
 
 def _tactical_dashboard_tab():
@@ -242,11 +301,13 @@ def _tactical_dashboard_tab():
     grid.addWidget(_status_card("TLA+ / STIG", "TLC: 3 SPECS VERIFIED\nSTIG: 0 FAILURES\nSBOM: VERIFIED", "#3A3F1B"), 1, 1)
     grid.addWidget(_status_card("BLUE FORCE", "BFT: 3 ACTIVE\nSIGINT: NOMINAL\nEW: PASSIVE", "#4B5320"), 1, 2)
     lay.addLayout(grid)
-    # Quick actions
+    # Quick actions — full kill chain + mission
     actions = QHBoxLayout()
-    for txt in ["NEW MISSION", "MISSION PACKAGE", "AFTER ACTION REPORT", "OPSEC CHECK"]:
+    actions.setSpacing(6)
+    for txt in ["NEW MISSION", "RECON", "FORGE", "FUZZ", "PHISH", "C2", "PERSIST", "APT", "KILLCHAIN", "REPORT", "STIX", "OPSEC"]:
         btn = QPushButton(txt)
-        btn.setStyleSheet("QPushButton { background: #4B5320; color: white; padding: 6px 12px; font-size: 9px; }")
+        btn.setStyleSheet("QPushButton { background: #4B5320; color: white; padding: 5px 9px; font-size: 8px; font-weight: bold; border-radius: 3px; } QPushButton:hover { background: #5A6428; }")
+        btn.setToolTip(f"Quick launch {txt.lower()} (see tab)")
         actions.addWidget(btn)
     actions.addStretch()
     lay.addLayout(actions)
@@ -291,6 +352,55 @@ def _dashboard_tab():
     # Legacy alias — now points to tactical dashboard
     return _tactical_dashboard_tab()
 
+def _show_splash(app):
+    """Royal Security splash with laurel logo — 900ms."""
+    try:
+        from PySide6.QtWidgets import QSplashScreen
+        from PySide6.QtGui import QPixmap, QFont, QPainter, QColor
+        from PySide6.QtCore import Qt
+    except ImportError:
+        try:
+            from PyQt6.QtWidgets import QSplashScreen
+            from PyQt6.QtGui import QPixmap, QFont, QPainter, QColor
+            from PyQt6.QtCore import Qt
+        except ImportError:
+            return
+    logo_path = Path(__file__).parent / "assets" / "logo.png"
+    if not logo_path.exists():
+        return
+    try:
+        pix = QPixmap(str(logo_path))
+        if pix.isNull():
+            return
+        # Scale splash to 420x420 with black background
+        splash_pix = QPixmap(460, 460)
+        splash_pix.fill(QColor("#0A0A0A"))
+        painter = QPainter(splash_pix)
+        # Draw logo centered
+        scaled = pix.scaled(380, 380, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation)
+        x = (splash_pix.width() - scaled.width()) // 2
+        y = 20
+        painter.drawPixmap(x, y, scaled)
+        painter.setPen(QColor("#D4AF37"))
+        painter.setFont(QFont("Times New Roman", 18, QFont.Weight.Bold))
+        painter.drawText(splash_pix.rect().adjusted(0, 400, 0, -30), Qt.AlignmentFlag.AlignCenter, "ROYAL SECURITY")
+        painter.setPen(QColor("#C2B280"))
+        painter.setFont(QFont("Share Tech Mono", 9))
+        painter.drawText(splash_pix.rect().adjusted(0, 425, 0, -10), Qt.AlignmentFlag.AlignCenter, "CYBER PROTECTION  •  TACTICAL CONSOLE  •  v4.1.0-military")
+        painter.end()
+        splash = QSplashScreen(splash_pix)
+        splash.setWindowFlags(Qt.WindowType.WindowStaysOnTopHint | Qt.WindowType.FramelessWindowHint)
+        splash.show()
+        app.processEvents()
+        # Show for 900ms
+        from PySide6.QtCore import QEventLoop, QTimer
+        loop = QEventLoop()
+        QTimer.singleShot(900, loop.quit)
+        loop.exec()
+        splash.close()
+    except Exception:
+        pass
+
 def main(*_args, **_kwargs):
     if not QT_OK:
         print("GUI requires PySide6: pip install PySide6")
@@ -303,6 +413,8 @@ def main(*_args, **_kwargs):
     app.setOrganizationName("Royal-Sec")
     # Military QSS
     app.setStyleSheet(MILITARY_QSS)
+    # Royal Security splash
+    _show_splash(app)
     # Resolve classification for banners (mission or env)
     try:
         from rtai_core.mission import MISSION_DIR, list_missions

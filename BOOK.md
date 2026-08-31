@@ -1,6 +1,8 @@
+<p align="center"><img src="docs/assets/royal-security-logo.png" width="200" alt="Royal Security — Cyber Protection — laurel, crown, shield"></p>
+
 # rtai-suite: Military-Grade AI-Integrated Red Team Toolkit
 
-**Version:** 4.1.0-military (Tactical Operations Console — FIPS/HSM/mTLS/OPA/WORM/SLSA/STIG/TLA+/STIX + Full Kill Chain)  
+**Version:** 4.1.0-military (Tactical Operations Console — Royal Security laurel-shield-crown emblem — FIPS/HSM/mTLS/OPA/WORM/SLSA/STIG/TLA+/STIX + Full Kill Chain)  
 **Status:** Production Ready — Military Hardened  
 **Tests:** 91 passing | **Lint:** Clean | **Type Check:** 40 files Clean | **GUI:** OD Green HUD Tactical
 

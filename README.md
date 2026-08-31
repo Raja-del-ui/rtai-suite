@@ -1,6 +1,8 @@
-﻿# Royal-Sec — AI-Integrated Red Team Toolkit
+﻿<p align="center"><img src="docs/assets/royal-security-logo.png" width="220" alt="Royal Security — Cyber Protection"></p>
 
-**v4.1.0-military — Royal-Sec Tactical Operations Console.** Five standalone tools on one engineered core (`rtai_core`),
+# Royal-Sec — AI-Integrated Red Team Toolkit
+
+**v4.1.0-military — Royal-Sec Tactical Operations Console** with **Royal Security laurel-shield-crown emblem** (OD Green #1A261A / Coyote #C2B280 / Gold #D4AF37). Five standalone tools on one engineered core (`rtai_core`),
 fronted by a hardened REST microservice (mTLS/SPIFFE, FIPS 140-3, OPA, HSM), a unified `rtai` CLI (`rtai mission` + 9 tools), **military-style GUI** (OD Green / Coyote / Black-Green HUD, classification banners, tactical map), containers, and STIX/TAXII + TLA+ + STIG.
 
 > **AUTHORIZATION REQUIRED — Royal-Sec Authorized Use Only** — Every tool here is for
