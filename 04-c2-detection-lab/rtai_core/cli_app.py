@@ -27,6 +27,10 @@ TOOLS = {
     "c2-analyze": "04-c2-detection-lab/analyze.py",
     "report": "05-pentest-report-copilot/copilot.py",
     "mission": "rtai_core/mission_cli.py",
+    "weaponize": "06-weaponization-forge/forge.py",
+    "persist": "07-persistence-privesc-lab/persist_lab.py",
+    "apt": "08-discovery-lateral-exfil-lab/apt_lab.py",
+    "killchain": "09-killchain-orchestrator/orchestrator.py",
     "gui": "rtai_core/gui/launcher.py",
 }
 

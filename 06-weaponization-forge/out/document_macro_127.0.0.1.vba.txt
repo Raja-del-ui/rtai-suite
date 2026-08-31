@@ -1,0 +1,29 @@
+' AUTHORIZED LAB USE ONLY — BENIGN PLACEHOLDER — NO MALICIOUS CODE
+' RT-WATERMARK: 06-weaponization-forge — T1587/T1583 benign simulation
+' RT-WATERMARK: 06-weaponization-forge — T1587/T1583 benign simulation | target=127.0.0.1 | template=document_macro | actor=Dilnawaz computer | ts=2026-08-30T23:43:23+00:00 | link=be284ab495562187
+' Template: document_macro — Office macro delivery vehicle (BENIGN PLACEHOLDER)
+' Target: 127.0.0.1
+' Safety: No AutoExec, No shell execution, No Download — benign only
+' Invert of real weaponization: this file is .vba.txt text, not a binary .docm
+'
+' EICAR test string (benign, detected as test): X5O!P%@AP[4\PZX54(P^)7CC)7}$EICAR-STANDARD-ANTIVIRUS-TEST-FILE!$H+H*
+' ————————————————————————————————————————————————————————————————
+' This placeholder simulates what a weaponized document macro WOULD look
+' like in the Weaponization stage (T1587.001), but contains ZERO
+' malicious code. For defensive training and detection engineering only.
+' If this file were a real .docm, the automatic handler would trigger a payload.
+' Here, the Sub below only displays a benign message box and exits.
+' ————————————————————————————————————————————————————————————————
+
+Sub BenignPlaceholder()
+    ' Audit watermark echoed at runtime for forensic correlation
+    Dim audit As String
+    audit = "RT-WATERMARK: 06-weaponization-forge — T1587/T1583 benign simulation | target=127.0.0.1 | template=document_macro | actor=Dilnawaz computer | ts=2026-08-30T23:43:23+00:00 | link=be284ab495562187"
+    MsgBox "RT Forge — BENIGN PLACEHOLDER" & vbCrLf & _
+           "Target: 127.0.0.1" & vbCrLf & _
+           "Audit: " & audit & vbCrLf & _
+           "No malicious code executed.", vbInformation, "Lab Only"
+End Sub
+
+' End of benign macro placeholder — no further content
+' INVOICE PDF PLACEHOLDER — AUDIT WATERMARK — NOT A REAL INVOICE

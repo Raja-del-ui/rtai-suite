@@ -1,0 +1,6 @@
+# AUTHORIZED LAB USE ONLY — BENIGN PLACEHOLDER — NO MALICIOUS CODE
+# Inside ISO container — benign LNK placeholder (see lnk_dropper)
+# Target: 127.0.0.1 | RT-WATERMARK: 06-weaponization-forge — T1587/T1583 benign simulation | target=127.0.0.1 | template=iso_container | actor=Dilnawaz computer | ts=2026-08-30T23:43:24+00:00 | link=00c5b497460a05cf
+# EICAR: X5O!P%@AP[4\PZX54(P^)7CC)7}$EICAR-STANDARD-ANTIVIRUS-TEST-FILE!$H+H*
+[BENIGN LNK INSIDE CONTAINER]
+Target=BENIGN_PLACEHOLDER

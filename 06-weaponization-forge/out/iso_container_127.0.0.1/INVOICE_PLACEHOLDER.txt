@@ -1,0 +1,15 @@
+AUTHORIZED LAB USE ONLY — BENIGN PLACEHOLDER — NO MALICIOUS CODE
+RT-WATERMARK: 06-weaponization-forge — T1587/T1583 benign simulation
+RT-WATERMARK: 06-weaponization-forge — T1587/T1583 benign simulation | target=127.0.0.1 | template=iso_container | actor=Dilnawaz computer | ts=2026-08-30T23:43:24+00:00 | link=00c5b497460a05cf
+INVOICE PDF PLACEHOLDER — AUDIT WATERMARK — NOT A REAL INVOICE
+Invoice PDF Placeholder — Lab Only (T1587 benign simulation)
+Target: 127.0.0.1
+Invoice #: LAB-12CA17B4
+Date: 2026-08-30
+Bill-To: Lab Training Environment — 127.0.0.1
+Line-Item: Security Awareness Training — Benign Artifact (Qty 1, $0.00)
+Notes: This is NOT a real invoice. It is a benign placeholder that mimics
+       the decoy document theme common in weaponization, watermarked for audit.
+       Contains EICAR test string for AV handling validation: X5O!P%@AP[4\PZX54(P^)7CC)7}$EICAR-STANDARD-ANTIVIRUS-TEST-FILE!$H+H*
+Audit-Link: a26ab5aca5e563be
+Generated: 2026-08-30T23:43:24.641374+00:00

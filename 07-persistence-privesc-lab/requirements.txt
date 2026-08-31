@@ -1,0 +1,2 @@
+# 07 persistence/privesc lab — runtime deps: Python standard library only. Fully offline-capable.
+# No third-party packages required; vendored rtai_core provides audit, validation, and CLI helpers.

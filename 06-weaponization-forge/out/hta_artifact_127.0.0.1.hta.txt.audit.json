@@ -1,0 +1,23 @@
+{
+  "tool": "06-weaponization-forge",
+  "kill_chain": "Weaponization",
+  "att&ck": [
+    "T1587",
+    "T1583"
+  ],
+  "target": "127.0.0.1",
+  "template": "hta_artifact",
+  "watermark": "AUTHORIZED LAB USE ONLY \u2014 BENIGN PLACEHOLDER \u2014 NO MALICIOUS CODE",
+  "audit_tag": "RT-WATERMARK: 06-weaponization-forge \u2014 T1587/T1583 benign simulation",
+  "actor": "Dilnawaz computer",
+  "generated": "2026-08-30T23:43:24.218466+00:00",
+  "file": "F:\\ALL PROJECTS\\RED-TEAM-PROJECTS\\06-weaponization-forge\\out\\hta_artifact_127.0.0.1.hta.txt",
+  "benign": true,
+  "eicar": "X5O!P%@AP[4\\PZX54(P^)7CC)7}$EICAR-STANDARD-ANTIVIRUS-TEST-FILE!$H+H*",
+  "target_verdict": {
+    "target": "127.0.0.1",
+    "verdict": "lab_ip",
+    "detail": "assert_lab_address passed (loopback/private/link-local)"
+  },
+  "content_sha256": "3d2ea85dbf4f8e87"
+}

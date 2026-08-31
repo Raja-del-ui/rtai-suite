@@ -1,0 +1,580 @@
+{
+  "company": "Lab",
+  "assessment_type": "APT Lab Simulation \u2014 08",
+  "generated": "2026-08-30T16:33:35",
+  "host": "127.0.0.1",
+  "stats": {
+    "total": 15,
+    "by_severity": {
+      "info": 7,
+      "low": 2,
+      "high": 2,
+      "medium": 3,
+      "critical": 1
+    },
+    "hosts": 1,
+    "tactics": [
+      "TA0005",
+      "TA0007",
+      "TA0008",
+      "TA0009",
+      "TA0010",
+      "TA0040"
+    ]
+  },
+  "findings": [
+    {
+      "ref": "F-001",
+      "tool": "apt-lab",
+      "kind": "simulation",
+      "host": "127.0.0.1",
+      "hostname": "127.0.0.1",
+      "location": "127.0.0.1:apt-lab/F-001",
+      "title": "Discovery: System Information (T1082) simulated",
+      "severity": "info",
+      "techniques": [
+        "T1082"
+      ],
+      "tactic": "TA0007",
+      "tactic_name": "Discovery",
+      "cve": null,
+      "tags": [
+        "T1082",
+        "TA0007"
+      ],
+      "description": "Simulated T1082 under TA0007 \u2014 lab-only, logged to JSONL, never executed against real assets."
+    },
+    {
+      "ref": "F-002",
+      "tool": "apt-lab",
+      "kind": "simulation",
+      "host": "127.0.0.1",
+      "hostname": "127.0.0.1",
+      "location": "127.0.0.1:apt-lab/F-002",
+      "title": "Discovery: File & Directory Enumeration (T1083) in lab temp",
+      "severity": "low",
+      "techniques": [
+        "T1083"
+      ],
+      "tactic": "TA0007",
+      "tactic_name": "Discovery",
+      "cve": null,
+      "tags": [
+        "T1083",
+        "TA0007"
+      ],
+      "description": "Simulated T1083 under TA0007 \u2014 lab-only, logged to JSONL, never executed against real assets."
+    },
+    {
+      "ref": "F-003",
+      "tool": "apt-lab",
+      "kind": "simulation",
+      "host": "127.0.0.1",
+      "hostname": "127.0.0.1",
+      "location": "127.0.0.1:apt-lab/F-003",
+      "title": "Discovery: Permission Groups (T1069) enumerated",
+      "severity": "info",
+      "techniques": [
+        "T1069"
+      ],
+      "tactic": "TA0007",
+      "tactic_name": "Discovery",
+      "cve": null,
+      "tags": [
+        "T1069",
+        "TA0007"
+      ],
+      "description": "Simulated T1069 under TA0007 \u2014 lab-only, logged to JSONL, never executed against real assets."
+    },
+    {
+      "ref": "F-004",
+      "tool": "apt-lab",
+      "kind": "simulation",
+      "host": "127.0.0.1",
+      "hostname": "127.0.0.1",
+      "location": "127.0.0.1:apt-lab/F-004",
+      "title": "Lateral Movement: PsExec/WMI/SMB simulation to lab host",
+      "severity": "high",
+      "techniques": [
+        "T1021",
+        "T1550"
+      ],
+      "tactic": "TA0008",
+      "tactic_name": "Lateral Movement",
+      "cve": null,
+      "tags": [
+        "T1021",
+        "T1550",
+        "TA0008"
+      ],
+      "description": "Simulated T1021, T1550 under TA0008 \u2014 lab-only, logged to JSONL, never executed against real assets."
+    },
+    {
+      "ref": "F-005",
+      "tool": "apt-lab",
+      "kind": "simulation",
+      "host": "127.0.0.1",
+      "hostname": "127.0.0.1",
+      "location": "127.0.0.1:apt-lab/F-005",
+      "title": "Collection: Staging directory with dummy files + 7z placeholder",
+      "severity": "medium",
+      "techniques": [
+        "T1005",
+        "T1074"
+      ],
+      "tactic": "TA0009",
+      "tactic_name": "Collection",
+      "cve": null,
+      "tags": [
+        "T1005",
+        "T1074",
+        "TA0009"
+      ],
+      "description": "Simulated T1005, T1074 under TA0009 \u2014 lab-only, logged to JSONL, never executed against real assets."
+    },
+    {
+      "ref": "F-006",
+      "tool": "apt-lab",
+      "kind": "simulation",
+      "host": "127.0.0.1",
+      "hostname": "127.0.0.1",
+      "location": "127.0.0.1:apt-lab/F-006",
+      "title": "Exfiltration: C2 channel POST to lab listener (T1041)",
+      "severity": "high",
+      "techniques": [
+        "T1041"
+      ],
+      "tactic": "TA0010",
+      "tactic_name": "Exfiltration",
+      "cve": null,
+      "tags": [
+        "T1041",
+        "TA0010"
+      ],
+      "description": "Simulated T1041 under TA0010 \u2014 lab-only, logged to JSONL, never executed against real assets."
+    },
+    {
+      "ref": "F-007",
+      "tool": "apt-lab",
+      "kind": "simulation",
+      "host": "127.0.0.1",
+      "hostname": "127.0.0.1",
+      "location": "127.0.0.1:apt-lab/F-007",
+      "title": "Exfiltration: DNS TXT covert channel simulation (T1048.003)",
+      "severity": "medium",
+      "techniques": [
+        "T1048"
+      ],
+      "tactic": "TA0010",
+      "tactic_name": "Exfiltration",
+      "cve": null,
+      "tags": [
+        "T1048",
+        "TA0010"
+      ],
+      "description": "Simulated T1048 under TA0010 \u2014 lab-only, logged to JSONL, never executed against real assets."
+    },
+    {
+      "ref": "F-008",
+      "tool": "apt-lab",
+      "kind": "simulation",
+      "host": "127.0.0.1",
+      "hostname": "127.0.0.1",
+      "location": "127.0.0.1:apt-lab/F-008",
+      "title": "Defense Evasion: UA rotation / obfuscation (T1027)",
+      "severity": "low",
+      "techniques": [
+        "T1027"
+      ],
+      "tactic": "TA0005",
+      "tactic_name": "Defense Evasion",
+      "cve": null,
+      "tags": [
+        "T1027",
+        "TA0005"
+      ],
+      "description": "Simulated T1027 under TA0005 \u2014 lab-only, logged to JSONL, never executed against real assets."
+    },
+    {
+      "ref": "F-009",
+      "tool": "apt-lab",
+      "kind": "simulation",
+      "host": "127.0.0.1",
+      "hostname": "127.0.0.1",
+      "location": "127.0.0.1:apt-lab/F-009",
+      "title": "Defense Evasion: Timestomp & masquerading (T1070/T1036)",
+      "severity": "medium",
+      "techniques": [
+        "T1070",
+        "T1036"
+      ],
+      "tactic": "TA0005",
+      "tactic_name": "Defense Evasion",
+      "cve": null,
+      "tags": [
+        "T1070",
+        "T1036",
+        "TA0005"
+      ],
+      "description": "Simulated T1070, T1036 under TA0005 \u2014 lab-only, logged to JSONL, never executed against real assets."
+    },
+    {
+      "ref": "F-010",
+      "tool": "apt-lab",
+      "kind": "simulation",
+      "host": "127.0.0.1",
+      "hostname": "127.0.0.1",
+      "location": "127.0.0.1:apt-lab/F-010",
+      "title": "Impact: Ransomware & resource hijack report-only (T1486/T1496)",
+      "severity": "critical",
+      "techniques": [
+        "T1486",
+        "T1496"
+      ],
+      "tactic": "TA0040",
+      "tactic_name": "Impact",
+      "cve": null,
+      "tags": [
+        "T1486",
+        "T1496",
+        "TA0040"
+      ],
+      "description": "Simulated T1486, T1496 under TA0040 \u2014 lab-only, logged to JSONL, never executed against real assets."
+    },
+    {
+      "ref": "SUP-3577",
+      "tool": "apt-lab",
+      "kind": "telemetry",
+      "host": "127.0.0.1",
+      "hostname": "127.0.0.1",
+      "location": "127.0.0.1:telemetry/T1082",
+      "title": "Telemetry: T1082 discovery",
+      "severity": "info",
+      "techniques": [
+        "T1082"
+      ],
+      "tactic": "TA0007"
+    },
+    {
+      "ref": "SUP-8e16",
+      "tool": "apt-lab",
+      "kind": "telemetry",
+      "host": "127.0.0.1",
+      "hostname": "127.0.0.1",
+      "location": "127.0.0.1:telemetry/T1082",
+      "title": "Telemetry: T1082 discovery",
+      "severity": "info",
+      "techniques": [
+        "T1082"
+      ],
+      "tactic": "TA0007"
+    },
+    {
+      "ref": "SUP-95f8",
+      "tool": "apt-lab",
+      "kind": "telemetry",
+      "host": "127.0.0.1",
+      "hostname": "127.0.0.1",
+      "location": "127.0.0.1:telemetry/T1057",
+      "title": "Telemetry: T1057 discovery",
+      "severity": "info",
+      "techniques": [
+        "T1057"
+      ],
+      "tactic": "TA0007"
+    },
+    {
+      "ref": "SUP-0584",
+      "tool": "apt-lab",
+      "kind": "telemetry",
+      "host": "127.0.0.1",
+      "hostname": "127.0.0.1",
+      "location": "127.0.0.1:telemetry/T1083",
+      "title": "Telemetry: T1083 discovery",
+      "severity": "info",
+      "techniques": [
+        "T1083"
+      ],
+      "tactic": "TA0007"
+    },
+    {
+      "ref": "SUP-3e7e",
+      "tool": "apt-lab",
+      "kind": "telemetry",
+      "host": "127.0.0.1",
+      "hostname": "127.0.0.1",
+      "location": "127.0.0.1:telemetry/T1018",
+      "title": "Telemetry: T1018 discovery",
+      "severity": "info",
+      "techniques": [
+        "T1018"
+      ],
+      "tactic": "TA0007"
+    }
+  ],
+  "telemetry_events": [
+    {
+      "event": "discovery",
+      "technique": "T1082",
+      "tactic": "TA0007",
+      "sub": "env_vars",
+      "count": 54,
+      "sample_keys": [
+        "ALLUSERSPROFILE",
+        "APPDATA",
+        "APT_LAB_ATTESTED",
+        "CHOCOLATEYINSTALL",
+        "CHOCOLATEYLASTPATHUPDATE",
+        "CHROME_CRASHPAD_PIPE_NAME",
+        "COMMONPROGRAMFILES",
+        "COMMONPROGRAMFILES(X86)",
+        "COMMONPROGRAMW6432",
+        "COMPUTERNAME"
+      ],
+      "note": "env values REDACTED \u2014 names only for discovery simulation",
+      "run_id": "27d14bfd45bc"
+    },
+    {
+      "event": "discovery",
+      "technique": "T1057",
+      "tactic": "TA0007",
+      "count": 20,
+      "sample": [
+        "System Idle Process",
+        "System",
+        "Secure System",
+        "Registry",
+        "smss.exe",
+        "csrss.exe",
+        "wininit.exe",
+        "csrss.exe",
+        "winlogon.exe",
+        "services.exe"
+      ],
+      "cmd": "tasklist /FO CSV /NH",
+      "redacted": "cmdline_redacted",
+      "run_id": "27d14bfd45bc"
+    },
+    {
+      "event": "discovery",
+      "technique": "T1083",
+      "tactic": "TA0007",
+      "path": "C:\\Users\\DILNAW~1\\AppData\\Local\\Temp\\apt_lab_stage_0a92b0ce",
+      "count": 0,
+      "sample": [],
+      "note": "lab temp dir only \u2014 no user profile enumeration",
+      "run_id": "27d14bfd45bc"
+    },
+    {
+      "event": "discovery",
+      "technique": "T1018",
+      "tactic": "TA0007",
+      "lab_host": "127.0.0.1",
+      "resolved": [
+        "127.0.0.1"
+      ],
+      "note": "lab-only resolution \u2014 no network sweep",
+      "run_id": "27d14bfd45bc"
+    },
+    {
+      "event": "discovery",
+      "technique": "T1069",
+      "tactic": "TA0007",
+      "user": "Dilnawaz computer",
+      "groups_sample": [
+        "GROUP INFORMATION",
+        "-----------------",
+        "Group Name                                                    Type             S",
+        "============================================================= ================ =",
+        "Everyone                                                      Well-known group S"
+      ],
+      "redacted": true,
+      "note": "local groups only \u2014 no domain enumeration",
+      "run_id": "27d14bfd45bc"
+    },
+    {
+      "event": "defense_evasion",
+      "technique": "T1027",
+      "tactic": "TA0005",
+      "sub": "obfuscated_files",
+      "ua_rotated": "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:127.0) Gecko/20100101 Firefox/127.0",
+      "payload_b64_sample": "c2ltdWxhdGVkX3BheWxvYWRfZm9yX2RldGVjdGlv...",
+      "note": "UA rotation + base64 obfuscation simulated (log only)",
+      "run_id": "27d14bfd45bc"
+    },
+    {
+      "event": "defense_evasion",
+      "technique": "T1070.006",
+      "tactic": "TA0005",
+      "sub": "timestomp",
+      "file": "stage_dummy_00.bin",
+      "original_mtime_sim": "2026-07-12T16:33:24.712612",
+      "timestomped_mtime_sim": "2026-08-30T16:33:24.712652",
+      "note": "LOG ONLY \u2014 no filesystem timestamps modified (report-only)",
+      "run_id": "27d14bfd45bc"
+    },
+    {
+      "event": "defense_evasion",
+      "technique": "T1036",
+      "tactic": "TA0005",
+      "sub": "masquerading",
+      "masqueraded_as": "rundll32.exe",
+      "real_binary": "apt_lab.py",
+      "note": "LOG ONLY \u2014 would masquerade as rundll32.exe (report-only, no process creation)",
+      "run_id": "27d14bfd45bc"
+    },
+    {
+      "event": "collection_staged",
+      "techniques": [
+        "T1005",
+        "T1074"
+      ],
+      "tactic": "TA0009",
+      "staging_dir": "C:\\Users\\DILNAW~1\\AppData\\Local\\Temp\\apt_lab_stage_0a92b0ce",
+      "dummy_files": [
+        "stage_dummy_00.bin",
+        "stage_dummy_01.bin",
+        "stage_dummy_02.bin"
+      ],
+      "total_bytes": 1153,
+      "archive_placeholder": "C:\\Users\\DILNAW~1\\AppData\\Local\\Temp\\apt_lab_stage_0a92b0ce\\staged.7z",
+      "seven_z_sim": "7z a -pInfected -mhe=on C:\\Users\\DILNAW~1\\AppData\\Local\\Temp\\apt_lab_stage_0a92b0ce\\staged.7z stage_dummy_00.bin stage_dummy_01.bin stage_dummy_02.bin",
+      "note": "LOG ONLY \u2014 dummy random bytes, no real user files collected; 7z not executed",
+      "run_id": "27d14bfd45bc"
+    },
+    {
+      "event": "lateral_attempt",
+      "technique": "T1021.001",
+      "tactic": "TA0008",
+      "method": "PsExec",
+      "dst_host": "127.0.0.1",
+      "dst_port": 445,
+      "desc": "Remote Services: SMB/PsExec",
+      "result": "simulated_blocked_lab_only",
+      "jitter_delay_ms": 554,
+      "note": "LOG ONLY \u2014 no network connection attempted",
+      "run_id": "27d14bfd45bc"
+    },
+    {
+      "event": "lateral_attempt",
+      "technique": "T1021.006",
+      "tactic": "TA0008",
+      "method": "WMI",
+      "dst_host": "127.0.0.1",
+      "dst_port": 135,
+      "desc": "Remote Services: Windows RM/WMI",
+      "result": "simulated_blocked_lab_only",
+      "jitter_delay_ms": 331,
+      "note": "LOG ONLY \u2014 no network connection attempted",
+      "run_id": "27d14bfd45bc"
+    },
+    {
+      "event": "lateral_attempt",
+      "technique": "T1021.004",
+      "tactic": "TA0008",
+      "method": "SMB",
+      "dst_host": "127.0.0.1",
+      "dst_port": 445,
+      "desc": "Remote Services: SMB Share",
+      "result": "simulated_blocked_lab_only",
+      "jitter_delay_ms": 597,
+      "note": "LOG ONLY \u2014 no network connection attempted",
+      "run_id": "27d14bfd45bc"
+    },
+    {
+      "event": "lateral_attempt",
+      "technique": "T1550.002",
+      "tactic": "TA0008",
+      "method": "Pass-the-Hash",
+      "dst_host": "127.0.0.1",
+      "dst_port": 445,
+      "desc": "Use Alternate Auth: PtH",
+      "result": "simulated_blocked_lab_only",
+      "jitter_delay_ms": 381,
+      "note": "LOG ONLY \u2014 no network connection attempted",
+      "run_id": "27d14bfd45bc"
+    },
+    {
+      "event": "lateral_attempt",
+      "technique": "T1080",
+      "tactic": "TA0008",
+      "method": "TaintSharedContent",
+      "dst_host": "127.0.0.1",
+      "dst_port": 445,
+      "desc": "Taint Shared Content (deprecated, simulated)",
+      "result": "simulated_blocked_lab_only",
+      "jitter_delay_ms": 585,
+      "note": "LOG ONLY \u2014 no network connection attempted",
+      "run_id": "27d14bfd45bc"
+    },
+    {
+      "event": "exfil_c2",
+      "technique": "T1041",
+      "tactic": "TA0010",
+      "url": "http://127.0.0.1:8080/exfil",
+      "bytes": 955,
+      "sha16": "c6d52b450e890c0a",
+      "ua": "curl/8.5.0",
+      "cookie": "sid=bcfbbc6f4f164ae6...",
+      "result": "listener_unreachable:[WinError 10061] No connection could be made because the target machine actively refused it",
+      "status": null,
+      "note": "synthetic random bytes \u2014 never real user data; integrates with 04 listener",
+      "run_id": "27d14bfd45bc"
+    },
+    {
+      "event": "exfil_c2",
+      "technique": "T1041",
+      "tactic": "TA0010",
+      "url": "http://127.0.0.1:8080/exfil",
+      "bytes": 458,
+      "sha16": "7ed324ce4503d1b7",
+      "ua": "Mozilla/5.0 (Macintosh; Intel Mac OS X 14_5) AppleWebKit/605.1.15 Version/17.5 S",
+      "cookie": "sid=22c77bff4ec4438c...",
+      "result": "listener_unreachable:[WinError 10061] No connection could be made because the target machine actively refused it",
+      "status": null,
+      "note": "synthetic random bytes \u2014 never real user data; integrates with 04 listener",
+      "run_id": "27d14bfd45bc"
+    },
+    {
+      "event": "exfil_dns",
+      "technique": "T1048.003",
+      "tactic": "TA0010",
+      "sub": "DNS_TXT",
+      "dns_query_sim": "509c46862405f89e.9208eb3b9e61caca.lab.example",
+      "txt_payload_sim": "zSRmluBk9E2/6hdoGYyGHV2wL1AWbcnp...",
+      "note": "LOG ONLY \u2014 DNS TXT query simulated, never sent; no real DNS exfil",
+      "run_id": "27d14bfd45bc"
+    },
+    {
+      "event": "exfil_cloud",
+      "technique": "T1048",
+      "tactic": "TA0010",
+      "sub": "cloud_dead_drop",
+      "dead_drop_url_sim": "https://lab-deaddrop.example/7225c03f7d9c/staged.7z",
+      "provider_sim": "pastebin",
+      "note": "LOG ONLY \u2014 cloud upload simulated, never executed",
+      "run_id": "27d14bfd45bc"
+    },
+    {
+      "event": "impact",
+      "technique": "T1486",
+      "tactic": "TA0040",
+      "sub": "data_encrypted_for_impact",
+      "ransom_note_sim": "YOUR FILES HAVE BEEN ENCRYPTED (SIMULATED) \u2014 lab report only, no files were touched.",
+      "files_would_encrypt": 0,
+      "note": "REPORT-ONLY \u2014 no encryption executed; detection rule should fire on ransom note creation",
+      "run_id": "27d14bfd45bc"
+    },
+    {
+      "event": "impact",
+      "technique": "T1496",
+      "tactic": "TA0040",
+      "sub": "resource_hijacking",
+      "cpu_would_consume": "85%",
+      "process_masq": "rundll32.exe",
+      "note": "REPORT-ONLY \u2014 no CPU hijack executed; log for EDR rule testing",
+      "run_id": "27d14bfd45bc"
+    }
+  ],
+  "note": "Synthetic findings \u2014 ingest with 05-pentest-report-copilot for AI-narrated report (e.g., python copilot.py --nmap /dev/null replacement via findings JSON)"
+}

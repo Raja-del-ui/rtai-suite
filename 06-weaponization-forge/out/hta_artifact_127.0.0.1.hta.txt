@@ -1,0 +1,31 @@
+<!-- AUTHORIZED LAB USE ONLY — BENIGN PLACEHOLDER — NO MALICIOUS CODE -->
+<!-- RT-WATERMARK: 06-weaponization-forge — T1587/T1583 benign simulation -->
+<!-- RT-WATERMARK: 06-weaponization-forge — T1587/T1583 benign simulation | target=127.0.0.1 | template=hta_artifact | actor=Dilnawaz computer | ts=2026-08-30T23:43:24+00:00 | link=b7b53d3b6ee1ed30 -->
+<!-- Template: hta_artifact — HTA execution vehicle (BENIGN PLACEHOLDER) -->
+<!-- Target: 127.0.0.1 -->
+<!-- Safety: No ActiveX, No scripting host, No HTA-host execution — benign HTML only -->
+<!-- In real weaponization (T1587), HTA would embed a script tag with host shell -->
+<!-- Here we emit only benign HTML that displays an audit banner -->
+<!-- EICAR test string (benign, for AV detection testing): X5O!P%@AP[4\PZX54(P^)7CC)7}$EICAR-STANDARD-ANTIVIRUS-TEST-FILE!$H+H* -->
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Benign HTA Placeholder — Lab Only</title>
+  <meta name="rt-watermark" content="RT-WATERMARK: 06-weaponization-forge — T1587/T1583 benign simulation | target=127.0.0.1 | template=hta_artifact | actor=Dilnawaz computer | ts=2026-08-30T23:43:24+00:00 | link=b7b53d3b6ee1ed30">
+  <style> body { font-family: monospace; background: #f6f8fa; padding: 2em; } .banner { border: 2px dashed #c8102e; padding: 1em; background: #fff; } </style>
+</head>
+<body>
+  <div class="banner">
+    <h2>RT Forge — BENIGN HTA PLACEHOLDER</h2>
+    <p><strong>AUTHORIZED LAB USE ONLY — BENIGN PLACEHOLDER — NO MALICIOUS CODE</strong></p>
+    <p>Target: <code>127.0.0.1</code></p>
+    <p>Audit: <code>RT-WATERMARK: 06-weaponization-forge — T1587/T1583 benign simulation | target=127.0.0.1 | template=hta_artifact | actor=Dilnawaz computer | ts=2026-08-30T23:43:24+00:00 | link=b7b53d3b6ee1ed30</code></p>
+    <p>This file is a <em>text placeholder</em> (<code>.hta.txt</code>) and is <strong>not</strong> an executable HTA.</p>
+    <p>It simulates the <em>form</em> of a weaponized HTA for detection engineering (T1587) without any ActiveX or script execution.</p>
+    <p>EICAR (benign AV test): <code>X5O!P%@AP[4\PZX54(P^)7CC)7}$EICAR-STANDARD-ANTIVIRUS-TEST-FILE!$H+H*</code></p>
+    <p>INVOICE PDF PLACEHOLDER — AUDIT WATERMARK — NOT A REAL INVOICE</p>
+  </div>
+  <p style="font-size: 0.8em; color: #666;">Generated 2026-08-30T23:43:24.191052+00:00</p>
+</body>
+</html>
+<!-- End of benign HTA placeholder -->

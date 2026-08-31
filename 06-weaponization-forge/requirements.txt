@@ -1,0 +1,6 @@
+# 06-weaponization-forge — runtime deps: Python standard library only
+# No third-party packages required. Vendored rtai_core ships inside this folder.
+# Optional: none — pure stdlib (argparse, hashlib, hmac, pathlib, datetime, json)
+
+# For verification: python -m py_compile forge.py
+# For testing: python forge.py --list-templates

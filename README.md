@@ -99,15 +99,21 @@ remain for standalone use.
 
 > Academic docs are archived under `docs/archive/` post commercial transition; product docs live at top-level `docs/` + `mkdocs.yml:17-69` nav.
 
-## The Suite
+## The Suite — Full Cyber Kill Chain (7 phases) + MITRE ATT&CK
 
-| # | Folder | Red-Team Phase | How AI Is Integrated |
+| # | Folder | Kill Chain / ATT&CK | How AI Is Integrated |
 |---|--------|----------------|----------------------|
-| 1 | `01-ai-recon-agent` | Reconnaissance | LLM fuses passive OSINT (RDAP, DNS, CT logs, TLS, Wayback, HTTP posture) into a prioritized attack-surface assessment |
-| 2 | `02-llm-injection-fuzzer` | Application Attack | Adaptive prompt-injection fuzzing with multi-turn chains, regex detectors + LLM-as-judge scoring, and automated payload mutation; SARIF output for CI |
-| 3 | `03-phishing-awareness-sim` | Social Engineering | LLM generates realistic-but-benign awareness-training emails with tokenized click-tracking, education landing page, and metrics dashboard |
-| 4 | `04-c2-detection-lab` | C2 / Post-Exploit Sim | Local C2 listener + timing-profile beacon simulator (jitter presets, office-hours schedule, kill switch); LLM drafts Sigma/Suricata detections |
-| 5 | `05-pentest-report-copilot` | Reporting | Parses nmap / nuclei / Nessus, cross-correlates tools, then LLM writes narratives, attack chain story, 30/60/90 roadmap |
+| 1 | `01-ai-recon-agent` | **Reconnaissance** `T1590/T1592/T1596` | LLM fuses passive OSINT (RDAP, DNS, CT logs, TLS, Wayback, HTTP posture) into prioritized attack-surface assessment |
+| 2 | `02-llm-injection-fuzzer` | **Weaponization+Exploitation** `T1587/T1190` | Adaptive prompt-injection fuzzing with multi-turn chains, regex detectors + LLM-as-judge scoring, automated payload mutation; SARIF output for CI |
+| 3 | `03-phishing-awareness-sim` | **Delivery** `T1566` | LLM generates realistic-but-benign awareness-training emails with tokenized click-tracking, education landing page, metrics dashboard |
+| 4 | `04-c2-detection-lab` | **C2** `T1071` | Local C2 listener + timing-profile beacon simulator (jitter presets, office-hours, kill switch); LLM drafts Sigma/Suricata detections |
+| 5 | `05-pentest-report-copilot` | **Actions on Objectives** | Parses nmap/nuclei/Nessus, cross-correlates, then LLM writes narratives, attack chain story, 30/60/90 roadmap + STIX/Navigator + classification |
+| 6 | `06-weaponization-forge` | **Weaponization** `T1587` | Benign forge: EICAR + watermarked macro/LNK/HTA/ISO/shellcode-stub placeholders, FORBIDDEN_SNIPPETS inverted blocklist, lab-only, audit-chained |
+| 7 | `07-persistence-privesc-lab` | **Installation / PrivEsc / CredAccess** `T1547/T1053/T1543/T1546/T1078/T1136/T1098` + `T1548/T1134` + `T1003/T1552/T1555` | Simulates registry Run, scheduled task, systemd service, WMI, Startup — logs only, never host write; safe privesc checks + cred existence scans |
+| 8 | `08-discovery-lateral-exfil-lab` | **Discovery / Lateral / Collection / Exfil / Impact** `T1082/T1083/T1018/T1069`, `T1021/T1550`, `T1005/T1074`, `T1041/T1048`, `T1486/T1496` + `T1027/T1070/T1036` | Read-only discovery, simulated lateral to 127.0.0.1 + jitter, dummy staging + 7z placeholder, exfil POST to lab listener + DNS/cloud covert sim, impact report-only |
+| 9 | `09-killchain-orchestrator` | **Orchestrator** | Runs `01→06→03→02→04→07→08→05` in order, mission-aware (`rtai mission`), `KILLCHAIN_ATTESTED` HMAC, `audit.log` hash chain, dry-run via `--help` for safe demos |
+
+> **APT realism:** Modules `06-08` are **lab-only simulations** (never real shellcode/exploit/persistence/credential dump/lateral/exfil of user data) — they log `simulated:true lab_only:true` + hash `audit.log` for blue-team detection tuning, mirroring real APT `EternalBlue / Mimikatz / PsExec / rclone` tradecraft safely. Orchestrator `09` ties all 7 kill-chain phases into one `rtai killchain --target 127.0.0.1 --mission missions/OP-XXXX.json --dry-run --yes` command.
 
 ## v2 Feature Highlights
 

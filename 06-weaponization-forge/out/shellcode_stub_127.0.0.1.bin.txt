@@ -1,0 +1,26 @@
+# AUTHORIZED LAB USE ONLY — BENIGN PLACEHOLDER — NO MALICIOUS CODE
+# RT-WATERMARK: 06-weaponization-forge — T1587/T1583 benign simulation
+# RT-WATERMARK: 06-weaponization-forge — T1587/T1583 benign simulation | target=127.0.0.1 | template=shellcode_stub | actor=Dilnawaz computer | ts=2026-08-30T23:43:25+00:00 | link=fac6a758ca1ef585
+# Template: shellcode_stub — shellcode payload stub (BENIGN PLACEHOLDER with EICAR)
+# Target: 127.0.0.1
+#
+# Real weaponization (T1587.004) would produce position-independent shellcode,
+# NOP sleds, encoders, and stagers. This BENIGN placeholder contains NONE of that.
+# Instead it contains ONLY:
+#   - This watermark and audit line
+#   - The EICAR standard test string (harmless, flagged by AV as TEST-FILE)
+#   - A textual note that shellcode would be here in a real (malicious) payload
+#
+# The file is .bin.txt (text), not a binary, not executable, not shellcode.
+# It is safe to handle, safe to scan, and safe to use as a detection canary.
+#
+# EICAR — benign AV test string (the only "payload" in this file):
+X5O!P%@AP[4\PZX54(P^)7CC)7}$EICAR-STANDARD-ANTIVIRUS-TEST-FILE!$H+H*
+#
+# Metadata:
+#   Stub-Note: BENIGN PLACEHOLDER — NO SHELLCODE — NO NOP SLED — NO ENCODER
+#   Target: 127.0.0.1
+#   Audit: RT-WATERMARK: 06-weaponization-forge — T1587/T1583 benign simulation | target=127.0.0.1 | template=shellcode_stub | actor=Dilnawaz computer | ts=2026-08-30T23:43:25+00:00 | link=fac6a758ca1ef585
+#   Hash-Link: 9a866f14d111e6bf
+#   INVOICE PDF PLACEHOLDER — AUDIT WATERMARK — NOT A REAL INVOICE
+# End of benign shellcode stub

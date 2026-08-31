@@ -1,0 +1,36 @@
+# AUTHORIZED LAB USE ONLY — BENIGN PLACEHOLDER — NO MALICIOUS CODE
+# RT-WATERMARK: 06-weaponization-forge — T1587/T1583 benign simulation
+# RT-WATERMARK: 06-weaponization-forge — T1587/T1583 benign simulation | target=127.0.0.1 | template=lnk_dropper | actor=Dilnawaz computer | ts=2026-08-30T23:43:23+00:00 | link=b3f8ed2b9c9c523e
+# Template: lnk_dropper — LNK shortcut delivery vehicle (BENIGN PLACEHOLDER)
+# Target: 127.0.0.1
+#
+# This is NOT a binary .lnk file. It is a plain-text placeholder that
+# describes what a weaponized LNK WOULD contain during Weaponization
+# (T1587 — shortcut as delivery vehicle), for detection engineering.
+#
+# Real LNK weaponization would set (REDACTED — executable primitives omitted
+# for safety; this placeholder intentionally omits the real shortcut target
+# and instead carries only a benign description for training):
+#   Target: [REDACTED — would be system shell with encoded payload in real malware]
+#   Icon: decoy.pdf
+#   WorkingDir: [REDACTED]
+# This BENIGN placeholder instead records:
+#   Target: BENIGN_PLACEHOLDER — NO EXECUTION
+#   Arguments: --lab-only --watermark "RT-WATERMARK: 06-weaponization-forge — T1587/T1583 benign simulation | target=127.0.0.1 | template=lnk_dropper | actor=Dilnawaz computer | ts=2026-08-30T23:43:23+00:00 | link=b3f8ed2b9c9c523e"
+#   Icon: placeholder.ico
+#   Description: Lab training artifact — safe to handle
+#
+# EICAR test string (benign, for AV detection testing):
+# X5O!P%@AP[4\PZX54(P^)7CC)7}$EICAR-STANDARD-ANTIVIRUS-TEST-FILE!$H+H*
+#
+[BENIGN LNK PLACEHOLDER]
+Target=BENIGN_PLACEHOLDER
+Arguments=--lab-only --benign --target 127.0.0.1 --link 727c7241c8ae
+WorkingDir=./lab_artifacts
+Icon=placeholder.ico
+Description=RT Forge lab placeholder — T1587 LNK weaponization simulation (no execution)
+Hotkey=None
+WindowStyle=Normal
+AuditWatermark=RT-WATERMARK: 06-weaponization-forge — T1587/T1583 benign simulation | target=127.0.0.1 | template=lnk_dropper | actor=Dilnawaz computer | ts=2026-08-30T23:43:23+00:00 | link=b3f8ed2b9c9c523e
+# INVOICE PDF PLACEHOLDER — AUDIT WATERMARK — NOT A REAL INVOICE
+# End of benign LNK placeholder

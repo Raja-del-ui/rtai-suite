@@ -1,0 +1,2 @@
+# P08 runtime deps: Python standard library only. Fully offline-capable, lab-only.
+# Optional: pip install jinja2 for report rendering via 05 copilot integration.
