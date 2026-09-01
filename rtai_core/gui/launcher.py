@@ -446,12 +446,13 @@ def main(*_args, **_kwargs):
         except Exception:
             pass
     else:
+        _auth_ok = True
         try:
             from rtai_core.gui.auth import is_first_run, is_locked_out, check_password, set_password, record_failure, record_success, password_strength_ok
         except ImportError:
-            QDialog = None
-            is_first_run = lambda: False
-        if QDialog is not None:
+            _auth_ok = False
+            is_first_run = lambda: False  # type: ignore
+        if _auth_ok:
             # Check lockout first
             try:
                 locked, remaining = is_locked_out()
