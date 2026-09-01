@@ -44,7 +44,7 @@ def create_provider(requested=None, model=None, api_key=None, base_url=None,
         return provider_class(model=resolved_model, api_key=resolved_key,
                               base_url=resolved_base, timeout=timeout)
     if chosen in GEMINI_LIKE:
-        provider_class = GEMINI_LIKE[chosen]
+        provider_class = GEMINI_LIKE[chosen]  # type: ignore[assignment]
         if defaults["key_env"] and not resolved_key:
             # also check GOOGLE_API_KEY alias
             alt = os.environ.get("GOOGLE_API_KEY","") or os.environ.get("GEMINI_API_KEY","")

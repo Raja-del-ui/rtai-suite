@@ -1,7 +1,7 @@
 """Google Gemini wire protocol — Generative Language API."""
 
 import os
-from typing import List
+from typing import Any, List
 
 from rtai_core.exceptions import ConfigError
 from rtai_core.providers.base import ChatProvider, Message, PROVIDER_DEFAULTS
@@ -37,10 +37,10 @@ class GeminiProvider(ChatProvider):
     def headers(self) -> dict:
         return {"Content-Type": "application/json", "X-goog-api-key": self.api_key}
 
-    def payload(self, messages: List[Message], temperature: float, max_tokens: int) -> dict:
+    def payload(self, messages: List[Message], temperature: float, max_tokens: int) -> dict[str, Any]:
         # Gemini wants contents: [{parts: [{text: ...}]}] with role user/model
         # Map system -> user prefix, and chat history
-        contents = []
+        contents: list[dict[str, Any]] = []
         system_texts = [m.content for m in messages if m.role == "system"]
         system_prefix = "\n\n".join(system_texts) + "\n\n" if system_texts else ""
         for m in messages:
