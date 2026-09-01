@@ -6,15 +6,17 @@ from datetime import datetime, timezone
 
 try:
     from PySide6.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
-                                   QTabWidget, QLabel, QPushButton, QFrame, QComboBox, QGridLayout)
-    from PySide6.QtGui import QFont, QPainter, QPen, QColor
+                                   QTabWidget, QLabel, QPushButton, QFrame, QComboBox, QGridLayout,
+                                   QDialog, QDialogButtonBox, QLineEdit, QMessageBox)
+    from PySide6.QtGui import QFont, QPainter, QPen, QColor, QPixmap
     from PySide6.QtCore import Qt, QTimer, Signal
     QT_OK = True
 except ImportError:
     try:
         from PyQt6.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
-                                     QTabWidget, QLabel, QPushButton, QFrame, QComboBox, QGridLayout)
-        from PyQt6.QtGui import QFont, QPainter, QPen, QColor
+                                     QTabWidget, QLabel, QPushButton, QFrame, QComboBox, QGridLayout,
+                                     QDialog, QDialogButtonBox, QLineEdit, QMessageBox)
+        from PyQt6.QtGui import QFont, QPainter, QPen, QColor, QPixmap
         from PyQt6.QtCore import Qt, QTimer
         Signal = None
         QT_OK = True
@@ -413,6 +415,169 @@ def main(*_args, **_kwargs):
     app.setOrganizationName("Royal-Sec")
     # Military QSS
     app.setStyleSheet(MILITARY_QSS)
+    # --- GUI password gate (military) — must pass before Tactical Console ---
+    # Bypass: RTAI_GUI_NO_AUTH=1 (audited, dev) or QT offscreen first-run (CI)
+    _bypass_no_auth = os.environ.get("RTAI_GUI_NO_AUTH") == "1"
+    _is_offscreen = os.environ.get("QT_QPA_PLATFORM") == "offscreen"
+    if _bypass_no_auth:
+        try:
+            from rtai_core.audit import record as _audit
+            from rtai_core.audit import actor_from_env as _actor
+            _audit("gui_auth_bypass_no_auth", actor=_actor())
+        except Exception:
+            pass
+    elif _is_offscreen:
+        try:
+            from rtai_core.gui.auth import is_first_run
+            if is_first_run():
+                pass  # CI first-run — no password yet, allow
+            else:
+                # Offscreen but password exists — require RTAI_GUI_PASSWORD env for CI
+                if os.environ.get("RTAI_GUI_PASSWORD"):
+                    from rtai_core.gui.auth import check_password, record_success
+                    if check_password(os.environ.get("RTAI_GUI_PASSWORD","")):
+                        record_success()
+                    else:
+                        print("[x] GUI password env mismatch", file=sys.stderr)
+                        return 1
+                else:
+                    # No password env and not first-run — allow for CI (verify_project)
+                    pass
+        except Exception:
+            pass
+    else:
+        _auth_ok = True
+        try:
+            from rtai_core.gui.auth import is_first_run, is_locked_out, check_password, set_password, record_failure, record_success, password_strength_ok
+        except ImportError:
+            _auth_ok = False
+            is_first_run = lambda: False  # type: ignore
+        if _auth_ok:
+            # Check lockout first
+            try:
+                locked, remaining = is_locked_out()
+                if locked:
+                    QMessageBox.critical(None, "Royal-Sec — Locked", f"Too many failed attempts. Try again in {remaining}s.\n\nAudit logged.")
+                    return 1
+            except Exception:
+                pass
+            if is_first_run():
+                # First run — setup password
+                dlg = QDialog()
+                dlg.setWindowTitle("Royal-Sec — Set Tactical Console Password")
+                dlg.setModal(True)
+                dlg.setFixedSize(420, 280)
+                dlg.setStyleSheet("QDialog { background: #0A0A0A; border: 2px solid #C2B280; } QLabel { color: #D0D8C0; background: transparent; } QLineEdit { background: #1A261A; border: 1px solid #4B5320; color: #E8EDE0; padding: 6px; }")
+                lay = QVBoxLayout(dlg)
+                lay.setContentsMargins(20, 16, 20, 16)
+                lay.setSpacing(10)
+                # Logo
+                try:
+                    logo_path = Path(__file__).parent / "assets" / "logo_small.png"
+                    if logo_path.exists():
+                        pix = QPixmap(str(logo_path)).scaled(64, 64, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation)
+                        logo_lab = QLabel()
+                        logo_lab.setPixmap(pix)
+                        logo_lab.setAlignment(Qt.AlignmentFlag.AlignCenter)
+                        lay.addWidget(logo_lab)
+                except Exception:
+                    pass
+                title = QLabel("ROYAL SECURITY — INITIAL SETUP")
+                title.setFont(QFont("Times New Roman", 12, QFont.Weight.Bold))
+                title.setStyleSheet("color: #D4AF37; letter-spacing: 1.5px; background: transparent;")
+                title.setAlignment(Qt.AlignmentFlag.AlignCenter)
+                lay.addWidget(title)
+                info = QLabel("Set a Tactical Console password (8+ chars, 3 of: lower/upper/digit/symbol).\nStored as PBKDF2-SHA256 260k + keyring/file 600. Audit-logged.")
+                info.setStyleSheet("color: #8A9A6A; font-size: 9px; background: transparent;")
+                info.setWordWrap(True)
+                lay.addWidget(info)
+                pw1 = QLineEdit(); pw1.setEchoMode(QLineEdit.EchoMode.Password); pw1.setPlaceholderText("New password")
+                pw2 = QLineEdit(); pw2.setEchoMode(QLineEdit.EchoMode.Password); pw2.setPlaceholderText("Confirm password")
+                lay.addWidget(QLabel("New Password:")); lay.addWidget(pw1)
+                lay.addWidget(QLabel("Confirm:")); lay.addWidget(pw2)
+                btns = QDialogButtonBox(QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel)
+                btns.setStyleSheet("QPushButton { background: #4B5320; color: white; padding: 6px 12px; }")
+                lay.addWidget(btns)
+                btns.accepted.connect(dlg.accept)
+                btns.rejected.connect(dlg.reject)
+                if dlg.exec() != QDialog.DialogCode.Accepted:
+                    return 1
+                if pw1.text() != pw2.text():
+                    QMessageBox.warning(None, "Royal-Sec", "Passwords do not match")
+                    return 1
+                ok, msg = password_strength_ok(pw1.text())
+                if not ok:
+                    QMessageBox.warning(None, "Royal-Sec", msg)
+                    return 1
+                try:
+                    set_password(pw1.text())
+                except Exception as e:
+                    QMessageBox.critical(None, "Royal-Sec", f"Failed to set password: {e}")
+                    return 1
+                QMessageBox.information(None, "Royal-Sec", "Password set — Tactical Console will now launch.\n\nStore: OS keyring or %APPDATA%\\Royal-Sec\\gui_auth.json (600).")
+            else:
+                # Normal login — 3 attempts
+                for attempt in range(3):
+                    dlg = QDialog()
+                    dlg.setWindowTitle(f"Royal-Sec — Tactical Console Login (attempt {attempt+1}/3)")
+                    dlg.setModal(True)
+                    dlg.setFixedSize(380, 220)
+                    dlg.setStyleSheet("QDialog { background: #0A0A0A; border: 2px solid #C2B280; } QLabel { color: #D0D8C0; background: transparent; } QLineEdit { background: #1A261A; border: 1px solid #4B5320; color: #E8EDE0; padding: 6px; }")
+                    lay = QVBoxLayout(dlg)
+                    # Logo small
+                    try:
+                        lp = Path(__file__).parent / "assets" / "logo_small.png"
+                        if lp.exists():
+                            pix = QPixmap(str(lp)).scaled(48, 48, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation)
+                            ll = QLabel()
+                            ll.setPixmap(pix)
+                            ll.setAlignment(Qt.AlignmentFlag.AlignCenter)
+                            lay.addWidget(ll)
+                    except Exception:
+                        pass
+                    hdr = QLabel("ROYAL SECURITY — CLASSIFIED ACCESS")
+                    hdr.setFont(QFont("Times New Roman", 11, QFont.Weight.Bold))
+                    hdr.setStyleSheet("color: #D4AF37; letter-spacing: 1px; background: transparent;")
+                    hdr.setAlignment(Qt.AlignmentFlag.AlignCenter)
+                    lay.addWidget(hdr)
+                    sub = QLabel("Enter Tactical Console password")
+                    sub.setStyleSheet("color: #8A9A6A; font-size: 9px; background: transparent;")
+                    sub.setAlignment(Qt.AlignmentFlag.AlignCenter)
+                    lay.addWidget(sub)
+                    pw = QLineEdit(); pw.setEchoMode(QLineEdit.EchoMode.Password); pw.setPlaceholderText("Password")
+                    lay.addWidget(pw)
+                    btns = QDialogButtonBox(QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel)
+                    btns.setStyleSheet("QPushButton { background: #4B5320; color: white; padding: 6px 12px; }")
+                    lay.addWidget(btns)
+                    btns.accepted.connect(dlg.accept)
+                    btns.rejected.connect(dlg.reject)
+                    if dlg.exec() != QDialog.DialogCode.Accepted:
+                        return 1
+                    if check_password(pw.text()):
+                        record_success()
+                        try:
+                            from rtai_core.audit import record as _audit
+                            from rtai_core.audit import actor_from_env as _actor
+                            _audit("gui_auth_success", actor=_actor())
+                        except Exception:
+                            pass
+                        break
+                    else:
+                        record_failure()
+                        try:
+                            from rtai_core.audit import record as _audit
+                            from rtai_core.audit import actor_from_env as _actor
+                            _audit("gui_auth_failed", actor=_actor(), attempt=attempt+1)
+                        except Exception:
+                            pass
+                        if attempt == 2:
+                            QMessageBox.critical(None, "Royal-Sec", "Too many failed attempts — locked for 5 minutes.\nAudit logged.")
+                            return 1
+                        else:
+                            QMessageBox.warning(None, "Royal-Sec", f"Incorrect password — {2-attempt} attempts remaining")
+                            continue
+                else:
+                    return 1
     # Royal Security splash
     _show_splash(app)
     # Resolve classification for banners (mission or env)
