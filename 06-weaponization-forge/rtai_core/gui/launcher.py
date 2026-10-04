@@ -26,32 +26,28 @@ except ImportError:
 from rtai_core.gui.style import MILITARY_QSS, CLASS_BANNER_QSS, LED_QSS
 
 def _classification_banner(classification="CUI", caveat=""):
-    """Top/bottom classification banner — DoD standard colors."""
+    """Top/bottom classification banner — DoD standard colors (compact for laptop)."""
     from rtai_core.mission import CLASS_BANNERS, CLASS_COLORS
-    # Resolve banner text and color
     base = CLASS_BANNERS.get(classification, classification)
     text = f"{base} // {caveat}" if caveat else base
-    # Full banner with handling
     w = QFrame()
     color = CLASS_COLORS.get(classification, "#007A33")
-    # Use QSS per classification
-    qss = CLASS_BANNER_QSS.get(classification, CLASS_BANNER_QSS["CUI"])
     w.setStyleSheet(f"QFrame {{ background: {color}; border: none; }} QLabel {{ color: white; background: transparent; }}")
-    w.setFixedHeight(26)
+    w.setFixedHeight(22)
     lay = QHBoxLayout(w)
     lay.setContentsMargins(0, 0, 0, 0)
     lab = QLabel(text)
     lab.setAlignment(Qt.AlignmentFlag.AlignCenter)
-    lab.setFont(QFont("Share Tech Mono", 10, QFont.Weight.Bold))
+    lab.setFont(QFont("Share Tech Mono", 9, QFont.Weight.Bold))
     lab.setStyleSheet("color: white; background: transparent; letter-spacing: 1px;")
     lay.addWidget(lab)
     return w
 
 def _banner():
-    """Military header banner — OD Green / Coyote tactical with Royal Security logo."""
+    """Military header banner — OD Green / Coyote tactical with Royal Security logo (compact)."""
     w = QFrame()
     w.setStyleSheet("QFrame { background: #0A0A0A; border: none; border-bottom: 2px solid #C2B280; } QLabel { color: #D0D8C0; background: transparent; }")
-    w.setFixedHeight(72)
+    w.setFixedHeight(60)
     lay = QHBoxLayout(w)
     lay.setContentsMargins(12, 6, 12, 6)
     # Left: logo + title block
@@ -157,7 +153,8 @@ class TacticalMapWidget(QFrame):
         super().__init__()
         self.setObjectName("tacticalMap")
         self.setStyleSheet("QFrame#tacticalMap { background: #050A05; border: 1px solid #4B5320; border-radius: 3px; }")
-        self.setMinimumHeight(200)
+        self.setMinimumHeight(150)
+        self.setMaximumHeight(220)
         # Overlay layout for HUD elements
         lay = QVBoxLayout(self)
         lay.setContentsMargins(8, 8, 8, 8)
@@ -254,8 +251,26 @@ class TacticalMapWidget(QFrame):
             painter.drawLine(x, y, x, y+20)
         painter.end()
 
+def _wrap_scroll(widget):
+    """Wrap tab in QScrollArea so 768p laptop can scroll instead of clipping."""
+    try:
+        # Use global QScrollArea if available (top-level import)
+        _QScrollArea = QScrollArea  # type: ignore[name-defined]
+    except NameError:
+        # Fallback import for PyInstaller/fallback
+        try:
+            from PySide6.QtWidgets import QScrollArea as _QScrollArea
+        except ImportError:
+            from PyQt6.QtWidgets import QScrollArea as _QScrollArea
+    scroll = _QScrollArea()
+    scroll.setWidgetResizable(True)
+    scroll.setFrameShape(QFrame.Shape.NoFrame)
+    scroll.setStyleSheet("QScrollArea { background: #0F1A0F; border: none; } QScrollBar { background: #0F1A0F; }")
+    scroll.setWidget(widget)
+    return scroll
+
 def _tactical_dashboard_tab():
-    """Military tactical dashboard — mission, OPSEC, encryption, audit, STIX."""
+    """Military tactical dashboard — mission, OPSEC, encryption, audit, STIX (compact for laptop)."""
     try:
         from PySide6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QGridLayout, QLabel, QPushButton, QFrame, QComboBox
         from PySide6.QtGui import QFont
@@ -409,6 +424,11 @@ def main(*_args, **_kwargs):
         print("  Windows: py -m pip install PySide6")
         print("  Kali: pip install PySide6 --break-system-packages (or venv)")
         return 1
+    # High-DPI for laptop 125%/150% scaling
+    try:
+        QApplication.setHighDpiScaleFactorRoundingPolicy(Qt.HighDpiScaleFactorRoundingPolicy.PassThrough)
+    except Exception:
+        pass
     app = QApplication(sys.argv)
     app.setApplicationName("Royal-Sec rtai-suite")
     app.setApplicationVersion("4.1.0-military")
@@ -591,7 +611,21 @@ def main(*_args, **_kwargs):
         caveat = os.environ.get("RTAI_CAVEAT", "")
     win = QMainWindow()
     win.setWindowTitle(f"ROYAL-SEC — TACTICAL OPERATIONS CONSOLE v4.1.0-military [{classification}]")
-    win.resize(1360, 860)
+    # Responsive sizing — 92% of available screen, capped, min for laptop 1024x600
+    try:
+        screen = app.primaryScreen()
+        avail = screen.availableGeometry() if screen else None
+        if avail:
+            w = min(1280, max(1024, int(avail.width() * 0.92)))
+            h = min(800, max(620, int(avail.height() * 0.90)))
+            win.resize(w, h)
+            # Center on screen
+            win.move(avail.x() + (avail.width() - w)//2, avail.y() + (avail.height() - h)//2)
+        else:
+            win.resize(1100, 700)
+    except Exception:
+        win.resize(1100, 700)
+    win.setMinimumSize(1024, 620)
     central = QWidget()
     lay = QVBoxLayout(central)
     lay.setContentsMargins(0, 0, 0, 0)
@@ -620,21 +654,22 @@ def main(*_args, **_kwargs):
         # Fallback placeholder — use globally imported QLabel (do not re-import locally to avoid shadowing)
         mission_tab = QLabel(f"Mission GUI unavailable: {e}")
         mission_tab.setAlignment(Qt.AlignmentFlag.AlignCenter)
-    tabs.addTab(_tactical_dashboard_tab(), "◆ TACTICAL")
-    tabs.addTab(mission_tab, "MISSION")
-    tabs.addTab(ReconGUI(), "RECON")
-    tabs.addTab(WeaponizeGUI(), "FORGE")
-    tabs.addTab(FuzzerGUI(), "FUZZER")
-    tabs.addTab(PhishGUI(), "PHISH")
-    tabs.addTab(C2LabGUI(), "C2 LAB")
-    tabs.addTab(PersistGUI(), "PERSIST")
-    tabs.addTab(AptGUI(), "APT LAB")
-    tabs.addTab(KillchainGUI(), "KILLCHAIN")
-    tabs.addTab(ReportGUI(), "REPORT")
+    # All tabs wrapped in scroll so laptop 768p never clips QGroupBox
+    tabs.addTab(_wrap_scroll(_tactical_dashboard_tab()), "◆ TACTICAL")
+    tabs.addTab(_wrap_scroll(mission_tab), "MISSION")
+    tabs.addTab(_wrap_scroll(ReconGUI()), "RECON")
+    tabs.addTab(_wrap_scroll(WeaponizeGUI()), "FORGE")
+    tabs.addTab(_wrap_scroll(FuzzerGUI()), "FUZZER")
+    tabs.addTab(_wrap_scroll(PhishGUI()), "PHISH")
+    tabs.addTab(_wrap_scroll(C2LabGUI()), "C2 LAB")
+    tabs.addTab(_wrap_scroll(PersistGUI()), "PERSIST")
+    tabs.addTab(_wrap_scroll(AptGUI()), "APT LAB")
+    tabs.addTab(_wrap_scroll(KillchainGUI()), "KILLCHAIN")
+    tabs.addTab(_wrap_scroll(ReportGUI()), "REPORT")
     # STIX/TAXII tab
     try:
         from rtai_core.gui.stix_gui import StixGUI
-        tabs.addTab(StixGUI(), "STIX")
+        tabs.addTab(_wrap_scroll(StixGUI()), "STIX")
     except Exception:
         pass
     lay.addWidget(tabs)

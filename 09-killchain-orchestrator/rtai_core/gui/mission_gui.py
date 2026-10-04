@@ -29,7 +29,9 @@ class MissionGUI(QWidget):
         lay.addWidget(hdr)
         # Mission ID row
         g0=QGroupBox("Mission Identity")
-        f0=QFormLayout(g0)
+        f0 = QFormLayout(g0)
+        f0.setFieldGrowthPolicy(QFormLayout.FieldGrowthPolicy.ExpandingFieldsGrow)
+        f0.setRowWrapPolicy(QFormLayout.RowWrapPolicy.WrapAllRows)
         self.mission_id=QLineEdit(placeholderText="auto — OP-XXXXXX")
         self.name=QLineEdit(placeholderText="MANTICORE SHIELD")
         self.callsign=QLineEdit(placeholderText="REAPER 06")
@@ -41,7 +43,9 @@ class MissionGUI(QWidget):
         lay.addWidget(g0)
         # Classification
         g1=QGroupBox("Classification & Handling")
-        f1=QFormLayout(g1)
+        f1 = QFormLayout(g1)
+        f1.setFieldGrowthPolicy(QFormLayout.FieldGrowthPolicy.ExpandingFieldsGrow)
+        f1.setRowWrapPolicy(QFormLayout.RowWrapPolicy.WrapAllRows)
         self.classification=QComboBox(); self.classification.addItems(CLASSIFICATIONS); self.classification.setCurrentText("CUI")
         self.caveat=QComboBox(); self.caveat.addItems(CAVEATS); self.caveat.setCurrentText("")
         self.approver=QLineEdit(placeholderText="COL Smith, J3")
@@ -53,7 +57,9 @@ class MissionGUI(QWidget):
         lay.addWidget(g1)
         # ROE
         g2=QGroupBox("Rules of Engagement")
-        f2=QFormLayout(g2)
+        f2 = QFormLayout(g2)
+        f2.setFieldGrowthPolicy(QFormLayout.FieldGrowthPolicy.ExpandingFieldsGrow)
+        f2.setRowWrapPolicy(QFormLayout.RowWrapPolicy.WrapAllRows)
         self.targets=QLineEdit(placeholderText="example.com, 10.0.0.1/24 (comma-separated)")
         self.techniques=QComboBox(); self.techniques.addItems(["recon,fuzz,phish,c2,report","recon,report","fuzz","phish"])
         self.start=QDateTimeEdit(); self.start.setDateTime(QDateTime.currentDateTimeUtc()); self.start.setDisplayFormat("yyyy-MM-dd HH:mm UTC")

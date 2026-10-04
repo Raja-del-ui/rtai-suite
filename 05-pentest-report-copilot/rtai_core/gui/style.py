@@ -26,12 +26,13 @@ QLabel[class="hud"] { color: #33FF33; font-family: 'Share Tech Mono', monospace;
 QLabel[class="stencil"] { color: #C2B280; font-family: 'Share Tech Mono', monospace; letter-spacing: 2px; text-transform: uppercase; }
 QLabel[class="classification"] { font-family: 'Share Tech Mono', monospace; letter-spacing: 1px; font-weight: bold; }
 
-/* === GROUPBOX — TACTICAL PANEL === */
-QGroupBox { background-color: #1A261A; border: 1px solid #4B5320; border-radius: 4px; margin-top: 12px; padding: 12px 10px 10px 10px; font-weight: bold; color: #C2B280; font-size: 10px; text-transform: uppercase; letter-spacing: 1px; }
-QGroupBox::title { subcontrol-origin: margin; left: 10px; padding: 0 6px; color: #C2B280; background-color: #1A261A; border: 1px solid #4B5320; border-radius: 2px; }
+/* === GROUPBOX — TACTICAL PANEL — responsive for laptop 768p === */
+QGroupBox { background-color: #1A261A; border: 1px solid #4B5320; border-radius: 4px; margin-top: 8px; padding: 10px 8px 8px 8px; font-weight: bold; color: #C2B280; font-size: 10px; text-transform: uppercase; letter-spacing: 0.8px; }
+QGroupBox::title { subcontrol-origin: margin; left: 8px; padding: 1px 6px; color: #C2B280; background-color: #1A261A; border: 1px solid #4B5320; border-radius: 2px; margin-top: 0px; }
 
-/* === INPUTS — DARK TACTICAL === */
-QLineEdit, QComboBox, QSpinBox, QDoubleSpinBox, QDateTimeEdit { background-color: #0A0F0A; border: 1px solid #4B5320; border-radius: 3px; padding: 6px 10px; color: #E8EDE0; min-height: 32px; min-width: 180px; font-family: 'JetBrains Mono', monospace; font-size: 12px; selection-background-color: #4B5320; selection-color: white; }
+/* === INPUTS — DARK TACTICAL — responsive === */
+QLineEdit, QComboBox, QSpinBox, QDoubleSpinBox, QDateTimeEdit { background-color: #0A0F0A; border: 1px solid #4B5320; border-radius: 3px; padding: 5px 8px; color: #E8EDE0; min-height: 30px; min-width: 110px; font-family: 'JetBrains Mono', monospace; font-size: 11px; selection-background-color: #4B5320; selection-color: white; }
+QFormLayout { spacing: 6px; }
 QLineEdit:focus, QComboBox:focus, QSpinBox:focus, QDoubleSpinBox:focus, QDateTimeEdit:focus { border: 1px solid #D4AF37; background-color: #121F12; }
 QLineEdit:disabled, QComboBox:disabled { background-color: #0F1A0F; color: #5A5A3A; border-color: #2A2E1A; }
 QComboBox::drop-down { border: none; width: 22px; }
@@ -89,6 +90,8 @@ QScrollBar:vertical { background: #0A0F0A; width: 10px; margin: 0px; border-left
 QScrollBar::handle:vertical { background: #2A341A; min-height: 24px; border-radius: 3px; margin: 2px; border: 1px solid #4B5320; }
 QScrollBar::handle:vertical:hover { background: #4B5320; border-color: #D4AF37; }
 QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical { height: 0px; }
+QScrollArea { border: none; background: #0F1A0F; }
+QScrollArea > QWidget > QWidget { background: #0F1A0F; }
 QScrollBar:horizontal { background: #0A0F0A; height: 10px; margin: 0px; border-top: 1px solid #1A261A; }
 QScrollBar::handle:horizontal { background: #2A341A; min-width: 24px; border-radius: 3px; margin: 2px; border: 1px solid #4B5320; }
 QScrollBar::handle:horizontal:hover { background: #4B5320; }
