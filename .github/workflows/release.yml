@@ -42,7 +42,7 @@ jobs:
           python -c "import rtai_core; print('shipped', rtai_core.__version__)"
           RTAI_FIPS=1 python -c "from rtai_core.military_fips import fips_status; print(fips_status())" || echo "FIPS dry-run"
           RTAI_TPM_ATTEST=1 python -c "from rtai_core.military_tpm import TPM2Interface; print('tpm dry')" || echo "TPM not present (expected in CI)"
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: distributions
           path: |
