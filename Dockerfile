@@ -1,12 +1,12 @@
 # syntax=docker/dockerfile:1
 # Multi-stage build: reproducible deps layer -> slim runtime as non-root user.
-FROM python:3.13-slim AS builder
+FROM python:3.15-slim AS builder
 WORKDIR /build
 COPY pyproject.toml README.md LICENSE ./
 COPY rtai_core ./rtai_core
 RUN pip install --no-cache-dir --prefix=/install .
 
-FROM python:3.13-slim AS runtime
+FROM python:3.15-slim AS runtime
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     RTAI_HOME=/app
